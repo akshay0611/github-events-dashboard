@@ -1,13 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Arial', sans-serif;
+  background-color: #111827; /* Dark background for body */
+  color: #F9FAFB; /* Light text color for readability */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1 {
+  font-size: 2.5rem;
+  color: #E5E7EB; /* Lighter text color for headings */
+}
+
+/* Event Card Styles */
+.event {
+  background-color: #1F2937; /* Dark background for event cards */
+  padding: 20px 30px; /* More padding for spacious feel */
+  border-radius: 16px; /* Soft rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+  margin-bottom: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.event:hover {
+  background-color: #2D3748; /* Darker shade on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Deeper shadow on hover */
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-header h3 {
+  font-size: 1.25rem; /* Larger font size for event type */
+  font-weight: 600;
+  color: #E5E7EB; /* Light color for the event type */
+}
+
+.event-time {
+  color: #9CA3AF; /* Light gray color for event time */
+  font-size: 12px;
+}
+
+.repo-name {
+  color: #A5B4FC; /* Lighter color for the repository name */
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.event-description {
+  font-size: 1rem;
+  color: #D1D5DB; /* Lighter gray text for description */
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+/* Custom classes for form elements */
+input {
+  transition: all 0.2s ease-in-out;
+  background-color: #374151; /* Darker background for inputs */
+  color: #F9FAFB; /* White text for inputs */
+  border: 1px solid #4B5563; /* Light gray border */
+  padding: 10px;
+  border-radius: 8px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4F46E5; /* Blue border on focus */
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+button {
+  transition: background-color 0.3s ease-in-out;
+  background-color: #3B82F6; /* Blue background for buttons */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #2563EB; /* Darker blue on hover */
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
+}
+
+/* Light text color for loading and no events */
+.loading, .no-events {
+  color: #A1A1AA; /* Light gray text for loading states */
+}
+
+/* Global adjustments for dark mode */
+a {
+  color: #3B82F6; /* Link color */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
