@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ErrorPage from './components/ErrorPage';
 
 function App() {
   const [events, setEvents] = useState([]);
@@ -8,33 +9,48 @@ function App() {
   const [userProfile, setUserProfile] = useState(null);
   const [selectedEventType, setSelectedEventType] = useState('');
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-  const [popularRepos, setPopularRepos] = useState([]); // State for popular repositories
+  const [popularRepos, setPopularRepos] = useState([]); 
+  const [error, setError] = useState(null); 
 
-  // Fetch GitHub Events
-  const fetchGitHubEvents = async () => {
+   // Fetch GitHub Events
+   const fetchGitHubEvents = async () => {
     if (username.trim()) {
       setLoading(true);
-      const response = await fetch(`https://api.github.com/users/${username}/events`);
-      const data = await response.json();
-      setEvents(data);
-      setFilteredEvents(data);
-      setLoading(false);
-      setIsFilterVisible(true);
+      setError(null); 
+      try {
+        const response = await fetch(`https://api.github.com/users/${username}/events`);
+        if (!response.ok) {
+          throw new Error(`Error fetching events: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        setEvents(data);
+        setFilteredEvents(data);
+        setIsFilterVisible(true);
+      } catch (err) {
+        console.error(err);
+        setError(err.message); 
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
 // Fetch GitHub Profile Information
 const fetchUserProfile = async () => {
   if (username.trim()) {
+    setError(null); 
     try {
       const profileResponse = await fetch(`https://api.github.com/users/${username}`);
+      if (!profileResponse.ok) {
+        throw new Error(`Error fetching profile: ${profileResponse.status} ${profileResponse.statusText}`);
+      }
       const profileData = await profileResponse.json();
 
       const starredResponse = await fetch(profileData.starred_url.replace("{/owner}{/repo}", ""));
       const starredData = await starredResponse.json();
 
       const orgsResponse = await fetch(profileData.organizations_url);
-      const orgsData = await orgsResponse.json(); // Includes organization logos and links
+      const orgsData = await orgsResponse.json();
 
       setUserProfile({
         ...profileData,
@@ -42,7 +58,8 @@ const fetchUserProfile = async () => {
         organizations: orgsData,
       });
     } catch (error) {
-      console.error("Error fetching profile:", error);
+      console.error(error);
+      setError(error.message); 
     }
   }
 };
@@ -50,18 +67,26 @@ const fetchUserProfile = async () => {
 
 
 // Fetch Popular Repositories
-  const fetchPopularRepos = async () => {
-    if (username.trim()) {
+const fetchPopularRepos = async () => {
+  if (username.trim()) {
+    setError(null); 
+    try {
       const reposResponse = await fetch(`https://api.github.com/users/${username}/starred`);
+      if (!reposResponse.ok) {
+        throw new Error(`Error fetching repositories: ${reposResponse.status} ${reposResponse.statusText}`);
+      }
       const reposData = await reposResponse.json();
-      // Sort repositories by stargazers_count
       const sortedRepos = reposData.sort((a, b) => b.stargazers_count - a.stargazers_count);
-      setPopularRepos(sortedRepos.slice(0, 5)); // Set top 5 repositories
+      setPopularRepos(sortedRepos.slice(0, 5));
+    } catch (err) {
+      console.error(err);
+      setError(err.message); 
     }
-  };
+  }
+};
 
-  // Filter events by type
-  const handleEventTypeFilter = (eventType) => {
+   // Filter events by type
+   const handleEventTypeFilter = (eventType) => {
     setSelectedEventType(eventType);
     if (eventType === '') {
       setFilteredEvents(events);
@@ -77,6 +102,11 @@ const fetchUserProfile = async () => {
     fetchPopularRepos(); // Fetch popular repositories
   };
 
+  if (error) {
+    // Show the ErrorPage component if there's an error
+    return <ErrorPage errorMessage={error} />;
+  }
+
   return (
     <div className="App bg-gray-900 text-white min-h-screen">
       {/* Header */}
@@ -86,7 +116,7 @@ const fetchUserProfile = async () => {
         </div>
         <h1 className="text-4xl font-extrabold">GitHub Events Dashboard</h1>
         <p className="mt-2 text-xl font-light">Track your GitHub activity and stay updated!</p>
-      </header>
+      </header> 
 
       {/* Main Content */}
       <main className="p-8">
