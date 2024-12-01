@@ -23,16 +23,33 @@ function App() {
     }
   };
 
-  // Fetch GitHub Profile Information
-  const fetchUserProfile = async () => {
-    if (username.trim()) {
+// Fetch GitHub Profile Information
+const fetchUserProfile = async () => {
+  if (username.trim()) {
+    try {
       const profileResponse = await fetch(`https://api.github.com/users/${username}`);
       const profileData = await profileResponse.json();
-      setUserProfile(profileData);
-    }
-  };
 
-  // Fetch Popular Repositories
+      const starredResponse = await fetch(profileData.starred_url.replace("{/owner}{/repo}", ""));
+      const starredData = await starredResponse.json();
+
+      const orgsResponse = await fetch(profileData.organizations_url);
+      const orgsData = await orgsResponse.json(); // Includes organization logos and links
+
+      setUserProfile({
+        ...profileData,
+        starredCount: starredData.length,
+        organizations: orgsData,
+      });
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  }
+};
+
+
+
+// Fetch Popular Repositories
   const fetchPopularRepos = async () => {
     if (username.trim()) {
       const reposResponse = await fetch(`https://api.github.com/users/${username}/starred`);
@@ -94,25 +111,65 @@ function App() {
           </form>
         </section>
 
-        {/* User Profile Section */}
-        {userProfile && (
-          <section className="mb-8 text-center">
-            <img src={userProfile.avatar_url} alt="Avatar" className="rounded-full w-32 h-32 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold">{userProfile.name}</h2>
-            <p className="text-lg text-gray-400">{userProfile.bio}</p>
-            <p className="text-sm text-gray-500 mt-2">
-              {userProfile.followers} Followers | {userProfile.public_repos} Public Repos
-            </p>
+{/* User Profile Section */}
+{userProfile && (
+  <section className="mb-8 text-center">
+    <img
+      src={userProfile.avatar_url}
+      alt="Avatar"
+      className="rounded-full w-32 h-32 mx-auto mb-4"
+    />
+    <h2 className="text-2xl font-bold">{userProfile.name}</h2>
+    <p className="text-lg text-gray-400">{userProfile.bio}</p>
+    {userProfile.location && (
+      <p className="text-gray-500 mt-2">📍 {userProfile.location}</p>
+    )}
+    {userProfile.email && (
+      <p className="text-gray-500 mt-2">📧 {userProfile.email}</p>
+    )}
+    <p className="text-sm text-gray-500 mt-2">
+      {userProfile.followers} Followers | {userProfile.public_repos} Public Repos
+    </p>
+    <p className="text-sm text-gray-500 mt-2">
+      ⭐ {userProfile.starredCount} Starred Repositories
+    </p>
+
+    {userProfile.organizations && userProfile.organizations.length > 0 && (
+      <div className="mt-4">
+        <h3 className="text-lg font-semibold">Organizations:</h3>
+        <div className="flex flex-wrap justify-center gap-7 mt-4">
+          {userProfile.organizations.map((org) => (
             <a
-              href={userProfile.html_url}
+              key={org.id}
+              href={org.url.replace("api.github.com/orgs", "github.com")} // Fix the URL for redirection
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 mt-4 inline-block"
+              className="flex flex-col items-center w-24 text-center hover:underline"
             >
-              View Profile
+              <img
+                src={org.avatar_url}
+                alt={`${org.login} logo`}
+                className="w-16 h-16 rounded-full shadow-md"
+              />
+              <p className="text-sm text-blue-500 mt-2 break-words">{org.login}</p>
             </a>
-          </section>
-        )}
+          ))}
+        </div>
+      </div>
+    )}
+
+    <a
+      href={userProfile.html_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-500 mt-4 inline-block"
+    >
+      View Profile
+    </a>
+  </section>
+)}
+
+
 
 {/* Filter Section */}
 {isFilterVisible && (
