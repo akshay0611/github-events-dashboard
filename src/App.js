@@ -243,29 +243,70 @@ const fetchPopularRepos = async () => {
 
 
 
-        {/* Event List */}
-        {loading ? (
-          <p className="text-center text-gray-400">Loading events...</p>
-        ) : filteredEvents.length > 0 ? (
-          <section>
-            <div className="space-y-6">
-              {filteredEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="bg-gray-800 shadow-lg hover:shadow-2xl rounded-lg p-6 transition-all hover:scale-105"
-                >
-                  <h3 className="text-2xl font-semibold text-blue-400">{event.type}</h3>
-                  <p className="text-sm text-gray-400 mt-2">
-                    {new Date(event.created_at).toLocaleString()}
-                  </p>
-                  <p className="mt-3 text-gray-200 font-medium">{event.repo.name}</p>
-                </div>
-              ))}
+
+{/* Event List */}
+{loading ? (
+  <p className="text-center text-gray-400">Loading events...</p>
+) : filteredEvents.length > 0 ? (
+  <section>
+    <div className="space-y-6">
+      {filteredEvents.map((event) => (
+        <div
+          key={event.id}
+          className="bg-gray-800 shadow-xl hover:shadow-2xl rounded-lg p-6 transition-all transform hover:scale-105 duration-300"
+        >
+          <div className="flex items-center space-x-4">
+            {/* User Avatar */}
+            <img
+              src={event.actor.avatar_url}
+              alt="User Avatar"
+              className="w-16 h-16 rounded-full border-4 border-white shadow-lg hover:scale-105 transform transition-all"
+            />
+            <div>
+              {/* Event Type */}
+              <h3 className="text-3xl font-semibold text-white">{event.type}</h3>
+              <p className="text-sm text-gray-200 mt-1">
+                {new Date(event.created_at).toLocaleString()}
+              </p>
             </div>
-          </section>
-        ) : (
-          <p className="text-center text-gray-400">No events found for this user.</p>
-        )}
+          </div>
+
+          {/* Event Type Icons with Hover Effects */}
+          <div className="mt-4 flex items-center space-x-4 text-white">
+            {event.type === 'PushEvent' && (
+              <span className="text-yellow-500 hover:text-yellow-300 transition-all">🔨 Push</span>
+            )}
+            {event.type === 'WatchEvent' && (
+              <span className="text-green-500 hover:text-green-300 transition-all">👀 Watch</span>
+            )}
+            {event.type === 'CreateEvent' && (
+              <span className="text-purple-500 hover:text-purple-300 transition-all">✨ Create</span>
+            )}
+          </div>
+
+          {/* Repository Link */}
+          <div className="mt-4">
+            <p className="text-white font-medium">{event.repo.name}</p>
+            <div className="mt-2">
+              <a
+                href={`https://github.com/${event.repo.name}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-200 hover:text-blue-400 text-sm font-semibold transition-all duration-300"
+              >
+                View Repository
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+) : (
+  <p className="text-center text-gray-400">No events found for this user.</p>
+)}
+
+
 
         {/* Popular Repositories Section */}
         {popularRepos.length > 0 && (
