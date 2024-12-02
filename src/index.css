@@ -137,3 +137,119 @@ section {
   transform: translateY(-50%); /* Ensure it's exactly centered */
   color: #ff5722;  /* Icon color */
 }
+
+/* Center the entire section */
+.trending-repos-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Title Styling */
+.trending-repos-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #fbbf24; /* Bright yellow for title */
+}
+
+/* Trending Repos Cards */
+.trending-repo-card {
+  background-color: #1f2937; /* Dark background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trending-repo-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.repo-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fbbf24; /* Bright yellow for repo name */
+  margin-bottom: 10px;
+}
+
+.repo-description {
+  font-size: 1rem;
+  color: #e5e7eb; /* Light gray for description */
+  margin-bottom: 15px;
+}
+
+.repo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.repo-stars {
+  font-size: 0.875rem;
+  color: #fcd34d; /* Star color */
+}
+
+.repo-link {
+  font-size: 0.875rem;
+  color: #3b82f6; /* Blue for the link */
+  text-decoration: underline;
+}
+
+.repo-link:hover {
+  color: #2563eb; /* Darker blue on hover */
+}
+
+/* Ensure the parent container is positioned relatively */
+.trending-repos-section {
+  position: relative;  /* Make the parent container the reference point for absolute positioning */
+}
+
+/* Navigation Buttons Container */
+.nav-buttons-container {
+  position: absolute;
+  bottom: 20px;  /* Distance from the bottom */
+  right: 20px;   /* Distance from the right */
+  display: flex;
+  gap: 15px;     /* Space between buttons */
+  z-index: 10;   /* Ensure buttons are on top of other content */
+}
+
+/* Style for each button */
+.nav-button {
+  background-color: #1E40AF;  /* Blue background */
+  color: white;
+  border-radius: 50%;
+  padding: 12px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Adding shadow for depth */
+  transition: all 0.3s ease;   /* Smooth transition for hover effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Hover effect for buttons */
+.nav-button:hover {
+  background-color: #2563EB;  /* Darker blue when hovered */
+  transform: scale(1.1);       /* Slight zoom effect */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);  /* Stronger shadow on hover */
+}
+
+/* Disabled state for buttons */
+.nav-button:disabled {
+  background-color: #9CA3AF;  /* Light gray when disabled */
+  cursor: not-allowed;
+  box-shadow: none;            /* Remove shadow when disabled */
+}
+
+/* Adjust icons inside the button */
+.nav-button svg {
+  width: 15px;  /* Adjusted icon size for better fit */
+  height: 15px;
+}
+
+

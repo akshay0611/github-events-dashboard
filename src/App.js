@@ -1,17 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';  // Added useEffect import
 import ErrorPage from './components/ErrorPage';
-import { FaGithub } from "react-icons/fa";
-import { FaSearch } from 'react-icons/fa';  
+import { FaGithub, FaSearch, FaStar, FaRegCheckCircle, FaUsers, FaExclamationCircle, FaChevronLeft, FaChevronRight} from 'react-icons/fa';
+import axios from 'axios';  // Import Axios
 
 function App() {
   const [headerSearch, setHeaderSearch] = useState('');
   const [mainSearch, setMainSearch] = useState('');
   const [error, setError] = useState(null); 
-
-  if (error) {
-    // Show the ErrorPage component if there's an error
-    return <ErrorPage errorMessage={error} />;
-  }
 
   return (
     <div className="App bg-gray-900 text-white min-h-screen">
@@ -74,6 +69,9 @@ function App() {
             </form>
           </div>
         </section>
+
+        {/* Trending Repositories Section */}
+        <TrendingRepos />
       </main>
 
       {/* Footer */}
@@ -84,4 +82,111 @@ function App() {
   );
 }
 
-export default App;
+const TrendingRepos = () => {
+  const [repos, setRepos] = useState([]);  // State for storing the fetched repositories
+  const [currentRepoIndex, setCurrentRepoIndex] = useState(0); // To track the current index
+  const [loading, setLoading] = useState(true);  // To handle loading state
+  const [error, setError] = useState(null); // To handle errors
+  
+  const reposPerPage = 3;  // Display 3 repositories at a time
+  const totalRepos = repos.length;
+
+  useEffect(() => {
+    // Fetch data from the API
+    const fetchRepos = async () => {
+      try {
+        const response = await axios.get('https://api.github.com/search/repositories', {
+          params: {
+            q: 'stars:>800', // Query to fetch repositories with more than 1 star
+            sort: 'stars', // Sort by stars to get trending repos
+            order: 'desc', // Descending order (most stars first)
+          }
+        });
+        setRepos(response.data.items);  // Use the 'items' key which contains the repositories
+        setLoading(false);
+      } catch (error) {
+        setError('Failed to load repositories');
+        setLoading(false);
+      }
+    };
+
+    fetchRepos();  // Call the function to fetch repos
+  }, []);
+
+  const handleNext = () => {
+    if (currentRepoIndex + reposPerPage < totalRepos) {
+      setCurrentRepoIndex(currentRepoIndex + reposPerPage);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentRepoIndex - reposPerPage >= 0) {
+      setCurrentRepoIndex(currentRepoIndex - reposPerPage);
+    }
+  };
+
+  // Slice the repos array to get the current 3 repositories to display
+  const currentRepos = repos.slice(currentRepoIndex, currentRepoIndex + reposPerPage);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    // Show the ErrorPage component if there's an error
+    return <ErrorPage errorMessage={error} />;
+  }
+
+  return (
+    <section className="trending-repos-section">
+      <h2 className="trending-repos-title text-3xl font-bold text-center mb-8">Trending Repositories</h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {currentRepos.map((repo, index) => (
+          <div key={index} className="trending-repo-card bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300">
+            <h3 className="repo-name text-2xl font-semibold text-white">{repo.name}</h3>
+            <p className="repo-description text-sm text-gray-400 mt-2">{repo.description}</p>
+
+            <div className="repo-stats flex justify-between items-center mt-4">
+              <div className="flex space-x-4 text-sm text-gray-300">
+                <div className="flex items-center">
+                  <FaStar className="text-yellow-400" />
+                  <span className="ml-1">{repo.stars} stars</span>
+                </div>
+                <div className="flex items-center">
+                  <FaExclamationCircle className="text-red-500" />
+                  <span className="ml-1">{repo.open_issues} issues</span>
+                </div>
+                <div className="flex items-center">
+                  <FaRegCheckCircle className="text-green-500" />
+                  <span className="ml-1">{repo.pull_requests} PRs</span>
+                </div>
+                <div className="flex items-center">
+                  <FaUsers className="text-blue-500" />
+                  <span className="ml-1">{repo.contributors} contributors</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <a href={repo.html_url} className="text-blue-500 hover:underline text-sm">
+                View Repo
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="nav-buttons-container">
+        <button onClick={handlePrevious} disabled={currentRepoIndex === 0} className="nav-button">
+          <FaChevronLeft />
+        </button>
+        <button onClick={handleNext} disabled={currentRepoIndex + reposPerPage >= totalRepos} className="nav-button">
+          <FaChevronRight />
+        </button>
+      </div>
+    </section>
+  );
+};
+
+export default App; 
