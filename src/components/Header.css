@@ -1,0 +1,119 @@
+/* General Header Styles */
+.header {
+    background-color: #1f2937; /* Dark gray background */
+    color: white;
+    padding: 16px; /* Padding for the header */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  } 
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Left Section Styles */
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 32px; /* Space between logo and links */
+  }
+  
+  .logo-link {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between logo and text */
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .logo {
+    height: 40px; /* Logo height */
+    width: auto; /* Maintain aspect ratio */
+  }
+  
+  .site-title {
+    font-size: 1.25rem; /* Text size */
+    font-weight: bold;
+  }
+  
+  .explore-link {
+    font-size: 0.875rem; /* Smaller text */
+    color: #d1d5db; /* Light gray */
+    text-decoration: none;
+  }
+  
+  .explore-link:hover,
+  .explore-link:focus {
+    color: #60a5fa; /* Blue on hover/focus */
+  }
+  
+  /* Right Section Styles */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Space between search and button */
+  }
+  
+  .search-container {
+    position: relative;
+  }
+  
+  .search-input {
+    padding: 8px 16px; /* Padding for the input */
+    padding-left: 40px; /* Space for the search icon */
+    font-size: 14px;
+    background-color: #374151; /* Darker gray background */
+    border: 1px solid #4b5563; /* Subtle border */
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+  }
+  
+  .input-active {
+    color: white;
+  }
+  
+  .input-inactive {
+    color: #9ca3af; /* Placeholder color */
+  }
+  
+  .search-input:focus {
+    border-color: #60a5fa; /* Blue focus border */
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5); /* Focus ring */
+  }
+  
+  .header-search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af; /* Icon color */
+  }
+  
+  
+  /* Button Styles */
+  .github-button {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    background-color: #3b82f6; /* Blue background */
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .github-button:hover {
+    background-color: #2563eb; /* Darker blue on hover */
+  }
+  
+  .github-icon {
+    font-size: 1rem; /* Icon size */
+  }
+  

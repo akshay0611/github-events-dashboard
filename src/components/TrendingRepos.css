@@ -1,0 +1,121 @@
+/* Trending Repos Section */
+.trending-repos-section {
+    padding: 40px;
+    background-color: #111827;
+    color: #F9FAFB;
+    text-align: center;
+  }
+  
+  /* Title Styling */
+  .trending-repos-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fbbf24; /* Bright yellow */
+    margin-bottom: 30px;
+  }
+  
+  /* Repo Cards Container */
+  .repo-cards-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
+  
+  /* Responsive for larger screens */
+  @media (min-width: 640px) {
+    .repo-cards-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .repo-cards-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  /* Repo Card Styling */
+  .trending-repo-card {
+    background-color: #1f2937;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .trending-repo-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Repo Name Styling */
+  .repo-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #fbbf24; /* Bright yellow */
+    margin-bottom: 10px;
+  }
+  
+  /* Repo Description Styling */
+  .repo-description {
+    font-size: 1rem;
+    color: #e5e7eb; /* Light gray */
+    margin-bottom: 15px;
+  }
+  
+  /* Repo Stats Styling */
+  .repo-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .repo-stat {
+    display: flex;
+    align-items: center;
+  }
+  
+  .repo-stat-icon {
+    color: #fcd34d; /* Yellow color for the star icon */
+    margin-right: 5px;
+  }
+  
+  /* Repo Link Styling */
+  .repo-link a {
+    color: #3b82f6;
+    text-decoration: underline;
+  }
+  
+  .repo-link a:hover {
+    color: #2563eb; /* Darker blue on hover */
+  }
+  
+  /* Pagination Buttons */
+  .pagination-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    background-color: #1E40AF;
+    color: white;
+    padding: 12px;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .pagination-button:hover {
+    background-color: #2563EB;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .pagination-button:disabled {
+    background-color: #9CA3AF;
+    cursor: not-allowed;
+  }
+  
