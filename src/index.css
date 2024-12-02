@@ -14,52 +14,6 @@ h1 {
   color: #E5E7EB; /* Lighter text color for headings */
 }
 
-/* Event Card Styles */
-.event {
-  background-color: #1F2937; /* Dark background for event cards */
-  padding: 20px 30px; /* More padding for spacious feel */
-  border-radius: 16px; /* Soft rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
-  margin-bottom: 20px;
-  transition: all 0.3s ease-in-out;
-}
-
-.event:hover {
-  background-color: #2D3748; /* Darker shade on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Deeper shadow on hover */
-}
-
-.event-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.event-header h3 {
-  font-size: 1.25rem; /* Larger font size for event type */
-  font-weight: 600;
-  color: #E5E7EB; /* Light color for the event type */
-}
-
-.event-time {
-  color: #9CA3AF; /* Light gray color for event time */
-  font-size: 12px;
-}
-
-.repo-name {
-  color: #A5B4FC; /* Lighter color for the repository name */
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin-top: 10px;
-}
-
-.event-description {
-  font-size: 1rem;
-  color: #D1D5DB; /* Lighter gray text for description */
-  margin-top: 10px;
-  line-height: 1.6;
-}
-
 /* Custom classes for form elements */
 input {
   transition: all 0.2s ease-in-out;
@@ -94,11 +48,6 @@ button:hover {
 button:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
-}
-
-/* Light text color for loading and no events */
-.loading, .no-events {
-  color: #A1A1AA; /* Light gray text for loading states */
 }
 
 /* Global adjustments for dark mode */
@@ -171,7 +120,7 @@ section {
   border: 1px solid #444;
   border-radius: 12px;
   padding: 12px;
-  padding-right: 40px; /* Add padding for button placement */
+  padding-right: 40px; /* Add padding for icon placement */
   transition: border-color 0.2s ease-in-out;
 }
 
@@ -180,11 +129,11 @@ section {
   border-color: #ff5722;
 }
 
-.form-button:hover {
-  background-color: rgba(255, 87, 34, 0.2); /* Light orange background on hover */
-}
-
-.form-button:focus {
-  outline: none;
-  border: 2px solid #ff5722;
+/* Search Icon Styling */
+.search-icon {
+  position: absolute;
+  right: 16px;  /* Position the icon inside the input on the right side */
+  top: 50%;     /* Vertically center the icon */
+  transform: translateY(-50%); /* Ensure it's exactly centered */
+  color: #ff5722;  /* Icon color */
 }
