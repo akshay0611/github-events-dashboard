@@ -1,121 +1,143 @@
 /* Trending Repos Section */
 .trending-repos-section {
-    padding: 40px;
-    background-color: #111827;
-    color: #F9FAFB;
-    text-align: center;
-  }
-  
-  /* Title Styling */
-  .trending-repos-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #fbbf24; /* Bright yellow */
-    margin-bottom: 30px;
-  }
-  
-  /* Repo Cards Container */
+  padding: 40px;
+  background-color: #111827;
+  color: #F9FAFB;
+  text-align: center;
+}
+
+/* Title Styling */
+.trending-repos-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fbbf24; /* Bright yellow */
+  margin-bottom: 30px;
+}
+
+/* Repo Cards Container */
+.repo-cards-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+}
+
+/* Responsive for larger screens */
+@media (min-width: 640px) {
   .repo-cards-container {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  /* Responsive for larger screens */
-  @media (min-width: 640px) {
-    .repo-cards-container {
-      grid-template-columns: repeat(2, 1fr);
-    }
+}
+
+@media (min-width: 1024px) {
+  .repo-cards-container {
+    grid-template-columns: repeat(3, 1fr);
   }
-  
-  @media (min-width: 1024px) {
-    .repo-cards-container {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  
-  /* Repo Card Styling */
-  .trending-repo-card {
-    background-color: #1f2937;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .trending-repo-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Repo Name Styling */
-  .repo-name {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #fbbf24; /* Bright yellow */
-    margin-bottom: 10px;
-  }
-  
-  /* Repo Description Styling */
-  .repo-description {
-    font-size: 1rem;
-    color: #e5e7eb; /* Light gray */
-    margin-bottom: 15px;
-  }
-  
-  /* Repo Stats Styling */
-  .repo-stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .repo-stat {
-    display: flex;
-    align-items: center;
-  }
-  
-  .repo-stat-icon {
-    color: #fcd34d; /* Yellow color for the star icon */
-    margin-right: 5px;
-  }
-  
-  /* Repo Link Styling */
-  .repo-link a {
-    color: #3b82f6;
-    text-decoration: underline;
-  }
-  
-  .repo-link a:hover {
-    color: #2563eb; /* Darker blue on hover */
-  }
-  
-  /* Pagination Buttons */
-  .pagination-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-  }
-  
-  .pagination-button {
-    background-color: #1E40AF;
-    color: white;
-    padding: 12px;
-    border-radius: 50%;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-  }
-  
-  .pagination-button:hover {
-    background-color: #2563EB;
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  .pagination-button:disabled {
-    background-color: #9CA3AF;
-    cursor: not-allowed;
-  }
-  
+}
+
+/* Repo Card Styling */
+.detailed-repo-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #1f2937; /* Dark gray */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none; /* Removes link underline */
+  color: inherit; /* Keeps text color consistent */
+}
+
+.detailed-repo-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer; /* Indicates the card is clickable */
+}
+
+/* Repo Top Section */
+.repo-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.repo-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Makes the avatar circular */
+  object-fit: cover; /* Ensures the image doesn't stretch */
+  border: 2px solid #1f2937; /* Optional: Add a border for better visibility */
+}
+
+.repo-username {
+  font-size: 0.9rem;
+  color: #9CA3AF; /* Light gray */
+  font-weight: 500;
+}
+
+/* Repo Name Styling */
+.repo-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fbbf24; /* Bright yellow */
+  margin-bottom: 10px;
+}
+
+/* Repo Description Styling */
+.repo-description {
+  font-size: 1rem;
+  color: #e5e7eb; /* Light gray */
+  margin-bottom: 15px;
+}
+
+/* Repo Stats Styling */
+.repo-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.repo-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: #e5e7eb; /* Light gray */
+}
+
+.repo-stat-icon {
+  font-size: 14px;
+  color: #fbbf24; /* Adjust color for icons */
+  margin-right: 5px; /* Adds spacing between icon and text */
+}
+
+
+
+/* Pagination Buttons */
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color: #1E40AF;
+  color: white;
+  padding: 12px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.pagination-button:hover {
+  background-color: #2563EB;
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pagination-button:disabled {
+  background-color: #9CA3AF;
+  cursor: not-allowed;
+}

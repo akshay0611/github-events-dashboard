@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FaStar, FaExclamationCircle, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaStar, FaCodeBranch, FaExclamationCircle} from 'react-icons/fa';
 import axios from 'axios';
 import ErrorPage from './ErrorPage';
-import './TrendingRepos.css'; // Import the custom CSS file
+import './TrendingRepos.css'; 
 
 const TrendingRepos = () => {
   const [repos, setRepos] = useState([]);
@@ -23,7 +23,22 @@ const TrendingRepos = () => {
             order: 'desc',
           },
         });
-        setRepos(response.data.items || []);
+
+        const reposWithPRs = await Promise.all(response.data.items.map(async (repo) => {
+          // Fetch the open pull requests count for each repository
+          const prResponse = await axios.get(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/pulls`, {
+            params: {
+              state: 'open',
+            },
+          });
+
+          return {
+            ...repo,
+            pullRequestCount: prResponse.data.length, // Add the pull request count to the repo data
+          };
+        }));
+
+        setRepos(reposWithPRs || []);
         setLoading(false);
       } catch (err) {
         setError('Failed to load repositories');
@@ -57,28 +72,51 @@ const TrendingRepos = () => {
       <h2 className="trending-repos-title">Trending Repositories</h2>
 
       <div className="repo-cards-container">
-        {currentRepos.map((repo) => (
-          <div key={repo.id} className="trending-repo-card">
-            <h3 className="repo-name">{repo.name}</h3>
-            <p className="repo-description">{repo.description}</p>
-
-            <div className="repo-stats">
-              <div className="repo-stat">
-                <FaStar className="repo-stat-icon" />
-                <span>{repo.stargazers_count} stars</span>
-              </div>
-              <div className="repo-stat">
-                <FaExclamationCircle className="repo-stat-icon" />
-                <span>{repo.open_issues_count} issues</span>
-              </div>
-            </div>
-
-            <div className="repo-link">
-              <a href={repo.html_url}>View Repo</a>
-            </div>
-          </div>
-        ))}
+  {currentRepos.map((repo) => (
+    <a
+      href={repo.html_url} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="detailed-repo-card"
+      key={repo.id}
+    >
+      <div className="repo-top">
+        <img 
+          src={repo.owner.avatar_url} 
+          alt={repo.owner.login} 
+          className="repo-avatar"
+        />
+        <span className="repo-username">{repo.owner.login}</span>
       </div>
+      <div className="repo-name">{repo.name}</div>
+      <div className="repo-description">{repo.description}</div>
+      <div className="repo-stats">
+        {/* Stars */}
+        <div className="repo-stat">
+          <FaStar className="repo-stat-icon" />
+          <span>{repo.stargazers_count}</span>
+        </div>
+        {/* Forks */}
+        <div className="repo-stat">
+          <FaCodeBranch className="repo-stat-icon" />
+          <span>{repo.forks_count}</span>
+        </div>
+        {/* Pull Requests */}
+        <div className="repo-stat">
+          <FaCodeBranch className="repo-stat-icon" />
+          <span>{repo.pullRequestCount} Open PRs</span>
+        </div>
+        {/* Issues */}
+        <div className="repo-stat">
+          <FaExclamationCircle className="repo-stat-icon" />
+          <span>{repo.open_issues_count} Issues</span>
+        </div>
+      </div>
+    </a>
+  ))}
+</div>
+
+
 
       <div className="pagination-buttons">
         <button
