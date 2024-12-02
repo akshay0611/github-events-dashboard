@@ -5,8 +5,8 @@
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
-  background-color: #111827; /* Dark background for body */
-  color: #F9FAFB; /* Light text color for readability */
+  background-color: #111827; 
+  color: #F9FAFB; 
 }
 
 h1 {
@@ -109,4 +109,82 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+.no-hover:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Main Section (Centered content) */
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;  /* Keep it auto to adjust based on content */
+  padding: 0;    /* Remove padding to avoid unnecessary space */
+  margin: 0;     /* Remove margin to avoid unnecessary space */
+}
+
+/* Form Container Styling */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  padding: 40px 48px;  /* Increased padding */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 100%;    /* Increase width */
+  max-width: 900px;  /* Set a larger max-width */
+  min-height: 350px;  /* Increase the minimum height */
+  height: auto;   /* Adjust based on content */
+  background-color: transparent; /* Make background transparent */
+}
+
+/* Title Styling */
+.form-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 20px;  /* Increased space below the title */
+}
+
+/* Form Styling */
+.form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: transparent; /* Make form background transparent */
+  border-radius: 9999px;
+  padding: 12px 16px;
+  width: 100%;
+  position: relative;
+}
+
+/* Input Styling */
+.form-input {
+  width: 100%; /* Make input take full width */
+  background: transparent;
+  color: white; /* Keep text color white for contrast */
+  font-size: 14px;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 12px;
+  padding-right: 40px; /* Add padding for button placement */
+  transition: border-color 0.2s ease-in-out;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #ff5722;
+}
+
+.form-button:hover {
+  background-color: rgba(255, 87, 34, 0.2); /* Light orange background on hover */
+}
+
+.form-button:focus {
+  outline: none;
+  border: 2px solid #ff5722;
 }

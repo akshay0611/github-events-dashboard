@@ -47,7 +47,7 @@ const ErrorPage = ({ errorMessage }) => {
 
       {/* Footer */}
       <footer className="mt-6 text-gray-500 text-sm">
-        <p>© 2024 GitHub Events Dashboard. Built with ❤️ by Akshay Kumar.</p>
+        <p>© 2024 GitTrack. Built with ❤️ by Akshay Kumar.</p>
       </footer>
     </div>
   );

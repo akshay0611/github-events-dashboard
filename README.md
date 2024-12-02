@@ -1,8 +1,8 @@
-# GitHub Events Dashboard
+# GitTrack
 
 ## Overview
 
-GitHub Events Dashboard is a React-based web application that allows users to track their GitHub activity. It fetches data from GitHub's Events API and displays the user's recent events, such as push events, watch events, and create events. Users can filter events by type, view their profile details, and see popular repositories they have starred or interacted with.
+GitTrack is a React-based web application that allows users to track their GitHub activity. It fetches data from GitHub's Events API and displays the user's recent events, such as push events, watch events, and create events. Users can filter events by type, view their profile details, and see popular repositories they have starred or interacted with.
 
 ## Features
 
@@ -15,7 +15,7 @@ GitHub Events Dashboard is a React-based web application that allows users to tr
 
 ## Demo
 
-![GitHub Events Dashboard](./assets/demo-screenshot.png)
+![GitTrack](./assets/demo-screenshot.png)
 
 ## Technologies Used
 

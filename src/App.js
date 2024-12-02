@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ErrorPage from './components/ErrorPage';
+import { FaGithub } from "react-icons/fa";
+import { FiSearch } from "react-icons/fi";
 
 function App() {
   const [events, setEvents] = useState([]);
@@ -12,7 +14,7 @@ function App() {
   const [popularRepos, setPopularRepos] = useState([]); 
   const [error, setError] = useState(null); 
 
-   // Fetch GitHub Events
+  // Fetch GitHub Events
    const fetchGitHubEvents = async () => {
     if (username.trim()) {
       setLoading(true);
@@ -108,38 +110,67 @@ const fetchPopularRepos = async () => {
   }
 
   return (
-    <div className="App bg-gray-900 text-white min-h-screen">
-      {/* Header */}
-      <header className="bg-gray-800 text-white p-8 text-center rounded-b-lg shadow-lg">
-        <div className="flex justify-center mb-4">
-          <img src="/logo.webp" alt="Logo" className="h-16 w-auto" />
-        </div>
-        <h1 className="text-4xl font-extrabold">GitHub Events Dashboard</h1>
-        <p className="mt-2 text-xl font-light">Track your GitHub activity and stay updated!</p>
-      </header> 
+<div className="App bg-gray-900 text-white min-h-screen">
+{/* Header */}
+<header className="bg-gray-800 text-white p-4 shadow-lg">
+  <div className="flex justify-between items-center">
+    {/* Left Section */}
+    <div className="flex items-center space-x-8">
+  <a href="/" className="flex items-center space-x-2 no-hover">
+    <img src="/logo.webp" alt="Logo" className="h-10 w-auto" />
+    <h1 className="text-xl font-bold">GitTrack</h1>
+  </a>
+  <a href="#explore" className="text-gray-300 hover:text-blue-500 focus:text-blue-500 text-sm">Explore</a>
+</div>
 
-      {/* Main Content */}
-      <main className="p-8">
-        {/* User Input Form */}
-        <section className="max-w-lg mx-auto mb-8">
-          <form onSubmit={handleSubmit} className="bg-gray-800 shadow-xl rounded-lg p-6 space-y-6 border-t-8 border-blue-600">
-            <div className="flex flex-col space-y-4">
-              <input
-                type="text"
-                placeholder="Enter GitHub Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-600 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-300 bg-gray-700 text-white"
-              />
-              <button
-                type="submit"
-                className="w-full py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-              >
-                Fetch Data
-              </button>
-            </div>
-          </form>
-        </section>
+  {/* Right Section */}
+  <div className="flex items-center space-x-4">
+  <div className="relative">
+    <input
+      type="text"
+      placeholder="Users, Repositories..."
+      className="px-10 py-1 text-sm text-gray-900 rounded-md focus:outline-none focus:ring focus:ring-gray-500"
+    />
+    <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+      <FiSearch className="h-5 w-5" />
+    </span>
+</div>
+
+      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center space-x-2">
+        <FaGithub className="h-5 w-5" />
+        <span>Connect with GitHub</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+
+
+{/* Main Content */}
+<main className="p-8">
+{/* User Input Form */}
+<section className="w-full flex items-center justify-center bg-transparent">
+  <div className="form-container">
+    <h1 className="form-title">
+      Explore <span className="text-orange-500">Open Source</span>
+    </h1>
+    <form
+      onSubmit={handleSubmit}
+      className="form flex items-center space-x-2 shadow-md transition-all ease-in-out duration-200"
+    >
+      <div className="relative w-full">
+        <input
+          type="text"
+          placeholder="Users, Repositories..."
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="form-input"
+        />
+
+      </div>
+    </form>
+  </div>
+</section>
 
 {/* User Profile Section */}
 {userProfile && (
@@ -303,7 +334,7 @@ const fetchPopularRepos = async () => {
     </div>
   </section>
 ) : (
-  <p className="text-center text-gray-400">No events found for this user.</p>
+  <p className="text-center text-gray-400"></p>
 )}
 
 
@@ -340,7 +371,7 @@ const fetchPopularRepos = async () => {
 
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-4 text-center mt-12">
-        <p>© 2024 GitHub Events Dashboard | Built with ❤️ by Akshay Kumar</p>
+        <p>© 2024 GitTrack | Built with ❤️ by Akshay Kumar</p>
       </footer>
     </div>
   );
