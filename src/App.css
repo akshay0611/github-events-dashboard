@@ -40,49 +40,38 @@
 /* Common search box styling */
 .common-search-box {
   position: fixed;
-  top: 20px; /* Adjust this value to push the box further down */
+  top: 20px;
   left: 50%;
-  transform: translateX(-50%); /* Center the search box horizontally */
-  background-color: #1e293b; /* Neutral dark blue background */
-  padding: 10px 15px; /* Reduced padding */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+  transform: translateX(-50%);
+  background-color: #1f2937; 
+  padding: 10px 15px;
   z-index: 1000;
   display: flex;
-  align-items: center; /* Center content vertically */
-  gap: 10px; /* Spacing between elements */
-  border-bottom: 3px solid #334155; /* Slightly lighter border */
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px; /* Rounded corners for a soft look */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  width: 60%;
   animation: slideDown 0.3s ease-in-out;
-  height: 50px; /* Reduced height */
-  width: 60%; /* Reduced width, adjust as needed */
-}
-
-/* Animation for sliding the search box down */
-@keyframes slideDown {
-  from {
-    top: -100px;
-  }
-  to {
-    top: 0;
-  }
 }
 
 /* Input field in the common search box */
 .common-search-box input {
-  flex-grow: 1; /* Take up remaining space */
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #475569; /* Subtle border */
+  flex-grow: 1;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #4b5563; /* Soft border */
   font-size: 16px;
-  background-color: #334155; /* Dark blue background for input */
+  background-color: #2d3748; /* Darker input background */
   color: #e2e8f0; /* Light text */
   outline: none;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Focus state for the input field */
 .common-search-box input:focus {
-  border-color: #3b82f6; /* Blue border on focus */
-  background-color: #1e293b; /* Match main box background */
+  border-color: #fbbf24; /* Subtle golden focus border */
+  background-color: #374151; /* Slightly lighter background on focus */
 }
 
 /* Placeholder color */
@@ -97,7 +86,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(30, 41, 59, 0.7); /* Semi-transparent blue overlay */
+  background: rgba(30, 41, 59, 0.7); /* Soft overlay background */
   z-index: 999;
   animation: fadeIn 0.3s forwards;
 }
@@ -119,43 +108,54 @@
 }
 
 .search-icon {
-  color: #94a3b8; /* Neutral icon color */
-  font-size: 20px;
+  color: #fbbf24; 
+  font-size: 18px;
 }
 
 /* Styling for search results dropdown */
 .search-results {
-  position: absolute; /* Make it relative to the search box */
-  top: 100%; /* Place it directly below the search box */
-  left: 50%; /* Center align relative to the search box */
-  transform: translateX(-50%); /* Adjust to center perfectly */
-  width: 60%; /* Match the width of the input field */
-  max-height: 300px; /* Limit height for scrollable content */
-  overflow-y: auto; /* Add scrolling if content exceeds max height */
-  background-color: #1e293b; /* Match the search box background */
-  border: 1px solid #475569; /* Subtle border */
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Slight shadow */
-  z-index: 1000; /* Ensure it's above other elements */
-  padding: 10px; /* Add some padding inside the box */
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-height: 250px; /* Reduced height for a more minimal look */
+  overflow-y: auto;
+  background-color: #1f2937;
+  border: 1px solid #4b5563; /* Soft border */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  z-index: 1000;
+  padding: 8px;
 }
+
+/* Section title styling */
+.section-title {
+  font-size: 18px; /* Appropriate font size for section headings */
+  font-weight: 600; /* Slightly bold for emphasis */
+  color: #ffffff; /* Golden color to match the theme */
+  margin-bottom: 8px; /* Space below the title for separation */
+  letter-spacing: 1px; /* Slight spacing between letters for a clean look */
+  text-align: left;
+}
+
 
 /* Individual result item */
 .result-item {
   display: flex;
   align-items: center;
-  gap: 15px; /* Space between icon and text */
-  padding: 12px 15px;
-  border-bottom: 1px solid #334155;
-  color: #e2e8f0; /* Light text */
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #4b5563; /* Light border between results */
+  color: #e2e8f0;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease;
 }
 
+/* Hover state for result items */
 .result-item:hover {
-  background-color: #475569; /* Slightly lighter on hover */
-  transform: translateX(5px); /* Subtle slide effect */
+  background-color: #374151; /* Light background on hover */
 }
 
 /* Remove bottom border for the last item */
@@ -163,55 +163,38 @@
   border-bottom: none;
 }
 
-/* Icon for the result item */
-.result-item .result-icon {
-  font-size: 18px;
-  color: #3b82f6; /* Blue icon for emphasis */
-  flex-shrink: 0;
-}
-
-/* Text content in the result item */
-.result-item .result-text {
-  flex-grow: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* Links in the result item */
-.result-item a {
-  color: #3b82f6; /* Blue for links */
-  text-decoration: none;
-}
-
-.result-item a:hover {
-  text-decoration: underline;
-}
-
 /* Avatar image for users */
 .avatar {
-  width: 32px;
-  height: 32px;
+  width: 30px; /* Slightly reduced size for a more compact look */
+  height: 30px; /* Slightly reduced size for a more compact look */
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 8px; /* Slightly reduced margin */
 }
 
+/* Repo info styling */
 .repo-info {
   display: flex;
   align-items: center;
-  gap: 10px; /* Adds space between the avatar and the repo name */
+  gap: 8px; /* Reduced gap between avatar and repo name */
 }
 
+/* Owner avatar container */
 .owner-avatar-container {
   display: inline-block;
 }
 
 .owner-avatar {
-  width: 30px;
-  height: 30px;
+  width: 28px; /* Slightly smaller avatar size */
+  height: 28px; /* Slightly smaller avatar size */
   border-radius: 50%;
 }
 
+/* Links in the result item */
+.result-item a {
+  color: #e2e8f0; /* Golden for links */
+  text-decoration: none;
+  font-weight: 500; /* Slightly bolder text */
+}
 
 
 
