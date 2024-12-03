@@ -7,36 +7,61 @@
     text-align: left; /* Align content to the left */
   }
   
-  .recommended-title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #fbbf24; /* Bright yellow */
-    margin-bottom: 15px;
-  }
-  
-  .recommendation-message {
-    font-size: 1rem;
-    color: #d1d5db;
-    margin-bottom: 20px;
-  }
+/* Heading Styling */
+.recommended-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #FFD700; /* Golden Yellow */
+  margin-bottom: 15px;
+}
+
+/* Subtext Styling */
+.recommendation-message {
+  font-size: 1rem;
+  color: #E5E7EB; /* Light Gray */
+  margin-bottom: 20px;
+  line-height: 1.5; /* Improves readability */
+}
+
   
   .github-button {
-    background-color: #6a5acd;
-    color: white;
+    background-color: #00FFFF; /* Bright Cyan */
+    color: #1E293B; /* Dark Gray for contrast */
     border: none;
     padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 8px; /* Slightly rounder corners */
+    font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 255, 255, 0.2); /* Cyan glow for a fresh look */
+    transition: all 0.3s ease;
   }
   
   .github-button:hover {
-    background-color: #5a4fa4;
+    background-color: #FFD700; /* Golden Yellow on hover */
+    color: #1E293B; /* Keep text readable */
+    box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4); /* Golden glow on hover */
+    transform: scale(1.05); /* Slight zoom-in for interactivity */
+  }
+  
+  .github-button:focus {
+    outline: none; /* Removes default focus outline */
+    box-shadow: 0 0 10px #00FFFF; /* Cyan glow for focus */
+  }
+  
+  .github-button:disabled {
+    background-color: #374151; /* Muted dark gray for disabled state */
+    color: #9CA3AF; /* Light gray text for readability */
+    cursor: not-allowed;
   }
   
   .github-icon {
     margin-right: 10px;
+    font-size: 1.2rem; /* Adjust icon size for better alignment */
+    color: inherit; /* Match the text color */
   }
+  
   

@@ -10,7 +10,7 @@
 .trending-repos-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #fbbf24; /* Bright yellow */
+  color: #FFD700; /* Bright yellow */
   margin-bottom: 30px;
   text-align: left;
 }
@@ -67,27 +67,27 @@
   height: 32px;
   border-radius: 50%; /* Makes the avatar circular */
   object-fit: cover; /* Ensures the image doesn't stretch */
-  border: 2px solid #1f2937; /* Optional: Add a border for better visibility */
+  border: 2px solid #00FFFF; /* Optional: Add a border for better visibility */
 }
 
 .repo-username {
-  font-size: 0.9rem;
-  color: #9CA3AF; /* Light gray */
+  font-size: 1rem; /* Slightly increased for better readability */
+  color: #0077FF; /* Retains the existing blue color */
   font-weight: 500;
 }
 
 /* Repo Name Styling */
 .repo-name {
-  font-size: 1.25rem;
+  font-size: 1.5rem; /* Increased for stronger emphasis */
   font-weight: bold;
-  color: #fbbf24; /* Bright yellow */
+  color: #FFFFFF; /* Keeps the white color for better visibility */
   margin-bottom: 10px;
 }
 
 /* Repo Description Styling */
 .repo-description {
-  font-size: 1rem;
-  color: #e5e7eb; /* Light gray */
+  font-size: 1.1rem; /* Slightly larger for easier reading */
+  color: #B2F5F9; /* Retains the light cyan color */
   margin-bottom: 15px;
 }
 
@@ -102,15 +102,16 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.9rem;
-  color: #e5e7eb; /* Light gray */
+  font-size: 1rem; /* Increased to balance with the other text sizes */
+  color: #FFFFFF; /* Retains the white color */
 }
 
 .repo-stat-icon {
-  font-size: 14px;
-  color: #fbbf24; /* Adjust color for icons */
+  font-size: 16px; /* Slightly larger for better visibility */
+  color: #00FFFF; /* Keeps the bright cyan for icons */
   margin-right: 5px; /* Adds spacing between icon and text */
 }
+
 
 
 
@@ -123,22 +124,25 @@
 }
 
 .pagination-button {
-  background-color: #1E40AF;
-  color: white;
+  background-color: #00FFFF; /* Bright Cyan */
+  color: #1E293B; /* Dark background for contrast */
   padding: 12px;
   border-radius: 50%;
   border: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.2); /* Light cyan glow */
   transition: all 0.3s ease;
 }
 
 .pagination-button:hover {
-  background-color: #2563EB;
+  background-color: #FFD700; /* Golden Yellow on hover */
+  color: #1E293B; /* Maintain contrast */
   transform: scale(1.1);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4); /* Golden Yellow glow */
 }
 
 .pagination-button:disabled {
-  background-color: #9CA3AF;
+  background-color: #374151; /* Muted dark gray */
+  color: #9CA3AF; /* Light gray text for disabled */
   cursor: not-allowed;
 }
+

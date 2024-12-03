@@ -1,96 +1,115 @@
 /* General Header Styles */
 .header {
-    background-color: #1f2937; /* Dark gray background */
-    color: white;
-    padding: 16px; /* Padding for the header */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-  } 
+  background-color: #1f2937; /* Dark gray background */
+  color: white;
+  padding: 16px; /* Padding for the header */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Left Section Styles */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 32px; /* Space between logo and links */
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between logo and text */
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Logo Styling */
+.logo {
+  height: 48px; /* Slightly larger logo for better visibility */
+  width: auto; /* Maintain aspect ratio */
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.1); /* Scale effect on hover */
+}
+
+/* Site Title Styling */
+.site-title {
+  font-size: 1.5rem; /* Larger text size for better readability */
+  font-weight: 700; /* Bold weight for more prominence */
+  color: #fbbf24; /* Golden yellow to match your theme */
+  transition: color 0.3s ease;
+}
+
+.site-title:hover {
+  color: #ffd700; /* Lighter yellow shade on hover for a nice effect */
+}
+
+/* Explore Link Styling */
+.explore-link {
+  font-size: 1rem; /* Slightly larger text size */
+  color: #ffffff; /* White color for better contrast */
+  text-decoration: none;
+  font-weight: 500; /* Medium font weight */
+  transition: color 0.3s ease; /* Smooth color change */
+}
+
+/* Hover Effect for Explore Link */
+.explore-link:hover,
+.explore-link:focus {
+  color: #ffd700; /* Light yellow on hover for contrast */
+  text-decoration: underline; /* Underline to signify interaction */
+}
+
+
+
+
   
-  .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Left Section Styles */
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 32px; /* Space between logo and links */
-  }
-  
-  .logo-link {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Space between logo and text */
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .logo {
-    height: 40px; /* Logo height */
-    width: auto; /* Maintain aspect ratio */
-  }
-  
-  .site-title {
-    font-size: 1.25rem; /* Text size */
-    font-weight: bold;
-  }
-  
-  .explore-link {
-    font-size: 0.875rem; /* Smaller text */
-    color: #d1d5db; /* Light gray */
-    text-decoration: none;
-  }
-  
-  .explore-link:hover,
-  .explore-link:focus {
-    color: #60a5fa; /* Blue on hover/focus */
-  }
-  
-  /* Right Section Styles */
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 16px; /* Space between search and button */
-  }
-  
-  .search-container {
-    position: relative;
-  }
-  
-  .search-input {
-    padding: 8px 16px; /* Padding for the input */
-    padding-left: 40px; /* Space for the search icon */
-    font-size: 14px;
-    background-color: #374151; /* Darker gray background */
-    border: 1px solid #4b5563; /* Subtle border */
-    border-radius: 8px;
-    color: white;
-    outline: none;
-    transition: border-color 0.2s ease-in-out;
-  }
-  
-  .input-active {
-    color: white;
-  }
-  
-  .input-inactive {
-    color: #9ca3af; /* Placeholder color */
-  }
-  
-  .search-input:focus {
-    border-color: #60a5fa; /* Blue focus border */
-    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5); /* Focus ring */
-  }
-  
-  .header-search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af; /* Icon color */
-  }
+ /* Right Section Styles */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Space between search and button */
+}
+
+.search-container {
+  position: relative;
+}
+
+/* Header Search Input Styling (Read-Only) */
+.search-input {
+  padding: 10px 16px; /* Increased padding for better spacing */
+  padding-left: 40px; /* Space for the search icon */
+  font-size: 16px; /* Slightly larger font size for better visibility */
+  background-color: #1E293B; /* Dark slate background */
+  border: 2px solid #4B5563; /* Subtle gray border */
+  border-radius: 12px; /* Slightly rounder border for a smoother look */
+  color: white;
+  outline: none;
+  pointer-events: none; /* Prevent interaction with the input field */
+}
+
+/* For inactive state (when the box is not clicked) */
+.input-inactive {
+  color: #9CA3AF; /* Placeholder color */
+}
+
+/* Header Search Icon */
+.header-search-icon {
+  position: absolute;
+  left: 12px; /* Adjusted for a slightly more centered position */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF; /* Subtle gray icon color */
+}
+
+
+
   
   
   /* Button Styles */

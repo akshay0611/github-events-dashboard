@@ -34,53 +34,54 @@
   
   /* Highlight Text (Orange) */
   .highlight-text {
-    color: #ff5722;
+    color: #00FFFF
   }
   
-  /* Form Styling */
-  .form {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    background-color: transparent;
-    border-radius: 9999px;
-    padding: 12px 16px;
-    position: relative;
-  }
-  
-  /* Input Container */
-  .input-container {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center; /* Vertically center the input and icon */
-  }
-  
-  /* Input Field Styling */
-  .form-input {
-    width: 100%;
-    padding: 12px 40px 12px 12px !important; /* Added !important to prevent conflict with tailwind */
-    background-color: transparent;
-    border: 1px solid #444;
-    border-radius: 12px;
-    color: white;
-    font-size: 14px;
-    transition: border-color 0.2s ease-in-out;
-  }
-  
-  
-  /* Focused Input Field */
-  .form-input:focus {
-    outline: none;
-    border-color: #ff5722;
-  }
-  
-  .user-input-search-icon {
-    color: #ff5722;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+ /* Form Styling */
+.form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: #1E293B; /* Dark slate blue for contrast */
+  border-radius: 24px; /* Rounded pill-shaped edges */
+  padding: 16px 20px; /* Adjusted padding for better spacing */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for a raised effect */
+  position: relative;
+  cursor: pointer; /* Indicating that the form is interactive */
+}
+
+/* Input Container */
+.input-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center; /* Vertically center the input and icon */
+}
+
+/* Input Field Styling */
+.form-input {
+  width: 100%;
+  padding: 14px 48px 14px 16px; /* Increased padding for more space */
+  background-color: transparent;
+  border: 2px solid #00FFFF; /* Bright cyan border for vibrance */
+  border-radius: 12px;
+  color: #FFFFFF; /* White text for clarity */
+  font-size: 16px; /* Larger font size for better readability */
+  font-weight: 500; /* Slightly bolder text */
+  pointer-events: none; /* Disables typing */
+
+}
+
+/* Search Icon Styling */
+.user-input-search-icon {
+  color: #FFD700; /* Golden yellow to complement the theme */
+  position: absolute;
+  right: 15px; /* Adjusted for better alignment */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px; /* Slightly larger for better visibility */
+  pointer-events: none; /* Disables icon click interaction */
+}
+
   
   

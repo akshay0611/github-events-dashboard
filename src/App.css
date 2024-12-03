@@ -40,11 +40,11 @@
 /* Common search box styling */
 .common-search-box {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 20px; /* Adjust this value to push the box further down */
+  left: 50%;
+  transform: translateX(-50%); /* Center the search box horizontally */
   background-color: #1e293b; /* Neutral dark blue background */
-  padding: 15px;
+  padding: 10px 15px; /* Reduced padding */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
   z-index: 1000;
   display: flex;
@@ -52,6 +52,8 @@
   gap: 10px; /* Spacing between elements */
   border-bottom: 3px solid #334155; /* Slightly lighter border */
   animation: slideDown 0.3s ease-in-out;
+  height: 50px; /* Reduced height */
+  width: 60%; /* Reduced width, adjust as needed */
 }
 
 /* Animation for sliding the search box down */
