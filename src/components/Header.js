@@ -2,7 +2,7 @@ import React from 'react';
 import { FaGithub, FaSearch } from 'react-icons/fa';
 import './Header.css'; 
 
-const Header = ({ searchQuery, setSearchQuery, toggleSearchBox }) => {
+const Header = ({ toggleSearchBox, isSearchBoxVisible }) => {
   return (
     <header className="header">
       <div className="header-container">
@@ -19,15 +19,17 @@ const Header = ({ searchQuery, setSearchQuery, toggleSearchBox }) => {
 
         {/* Right Section */}
         <div className="header-right">
-          <div className="search-container" onClick={toggleSearchBox}>
+          <div 
+            className="search-container" 
+            onClick={!isSearchBoxVisible ? toggleSearchBox : undefined} // Trigger only when the common search box is not visible
+          >
             <input
               type="text"
               placeholder="Users, Repositories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
               className={`search-input ${
-                searchQuery ? 'input-active' : 'input-inactive'
+                isSearchBoxVisible ? 'input-inactive' : 'input-active'
               }`}
+              readOnly // Prevent typing in the input field
             />
             <span className="header-search-icon">
               <FaSearch />

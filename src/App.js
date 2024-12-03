@@ -12,16 +12,30 @@ function App() {
   const [userInputSearchQuery, setUserInputSearchQuery] = useState('');
   const [isSearchBoxVisible, setIsSearchBoxVisible] = useState(false);
   const searchBoxRef = useRef(null);
+  const commonSearchInputRef = useRef(null);
 
   const toggleSearchBox = () => {
-    setIsSearchBoxVisible(!isSearchBoxVisible);
+    setIsSearchBoxVisible((prev) => {
+      if (prev) {
+        setUnifiedSearchQuery(''); // Clear the search query when closing the search box
+      }
+      return !prev;
+    });
   };
+
+  // Focus the common search box input when it becomes visible
+  useEffect(() => {
+    if (isSearchBoxVisible && commonSearchInputRef.current) {
+      commonSearchInputRef.current.focus();
+    }
+  }, [isSearchBoxVisible]);
 
   // Detect clicks outside the search box to close it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
         setIsSearchBoxVisible(false);
+        setUnifiedSearchQuery(''); // Clear the search query when clicking outside
       }
     };
 
@@ -50,9 +64,10 @@ function App() {
           searchQuery={userInputSearchQuery} 
           setSearchQuery={setUserInputSearchQuery} 
           toggleSearchBox={toggleSearchBox}
+          isSearchBoxVisible={isSearchBoxVisible} 
         />
 
-{isSearchBoxVisible && (
+        {isSearchBoxVisible && (
           <div className="common-search-box" ref={searchBoxRef}>
             <div className="search-icon-container">
               <FaSearch className="search-icon" />
@@ -63,6 +78,7 @@ function App() {
               value={unifiedSearchQuery}
               onChange={(e) => setUnifiedSearchQuery(e.target.value)}
               className="form-input"
+              ref={commonSearchInputRef}
             />
           </div>
         )}
