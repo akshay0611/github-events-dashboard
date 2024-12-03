@@ -26,9 +26,10 @@ const TrendingRepos = () => {
             Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
           },
         });
-    
-        const reposWithPRs = await Promise.all(
+  
+        const reposWithPRsAndIssues = await Promise.all(
           response.data.items.map(async (repo) => {
+            // Fetch open pull requests count
             const prResponse = await axios.get(
               `https://api.github.com/repos/${repo.owner.login}/${repo.name}/pulls`,
               {
@@ -38,25 +39,37 @@ const TrendingRepos = () => {
                 },
               }
             );
-    
+  
+            // Fetch open issues count (including PRs if any)
+            const issueResponse = await axios.get(
+              `https://api.github.com/repos/${repo.owner.login}/${repo.name}/issues`,
+              {
+                params: { state: 'open' },
+                headers: {
+                  Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+                },
+              }
+            );
+  
             return {
               ...repo,
               pullRequestCount: prResponse.data.length,
+              open_issues_count: issueResponse.data.length,
             };
           })
         );
-    
-        setRepos(reposWithPRs || []);
+  
+        setRepos(reposWithPRsAndIssues || []);
         setLoading(false);
       } catch (err) {
         setError('Failed to load repositories');
         setLoading(false);
       }
     };
-    
-
+  
     fetchRepos();
   }, []);
+  
 
   const handleNext = () => {
     if (currentRepoIndex + reposPerPage < totalRepos) {
@@ -124,6 +137,7 @@ const TrendingRepos = () => {
     </a>
   ))}
 </div>
+
 
 
 

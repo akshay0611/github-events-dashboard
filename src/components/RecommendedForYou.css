@@ -1,0 +1,42 @@
+/* src/components/RecommendedForYou.css */
+
+.recommended-for-you {
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+    text-align: left; /* Align content to the left */
+  }
+  
+  .recommended-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fbbf24; /* Bright yellow */
+    margin-bottom: 15px;
+  }
+  
+  .recommendation-message {
+    font-size: 1rem;
+    color: #d1d5db;
+    margin-bottom: 20px;
+  }
+  
+  .github-button {
+    background-color: #6a5acd;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .github-button:hover {
+    background-color: #5a4fa4;
+  }
+  
+  .github-icon {
+    margin-right: 10px;
+  }
+  

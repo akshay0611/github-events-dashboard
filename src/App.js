@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import UserInputForm from './components/UserInputForm';
 import TrendingRepos from './components/TrendingRepos';
+import RecommendedForYou from './components/RecommendedForYou'; // Import the component
+import Footer from './components/Footer'; // Import Footer component
+
 
 function App() {
   const [headerSearch, setHeaderSearch] = useState('');
@@ -14,11 +17,10 @@ function App() {
       <main className="p-8">
         <UserInputForm mainSearch={mainSearch} setMainSearch={setMainSearch} />
         <TrendingRepos />
+        <RecommendedForYou /> {/* Add the component below TrendingRepos */}
       </main>
 
-      <footer className="bg-gray-800 text-white py-4 text-center mt-12">
-        <p>© 2024 GitTrack | Built with ❤️ by Akshay Kumar</p>
-      </footer>
+      <Footer /> {/* Use Footer component here */}
     </div>
   );
 }
