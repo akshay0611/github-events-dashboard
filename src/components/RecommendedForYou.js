@@ -10,10 +10,15 @@ const RecommendedForYou = () => {
       <p className="recommendation-message">
         Log in to get personalized recommendations on repositories to contribute to!
       </p>
-      <button className="github-button">
-        <FaGithub className="github-icon" />
-        <span>Connect with GitHub</span>
-      </button>
+      <button
+  className="github-button"
+  onClick={() => {
+    window.location.href = 'http://localhost:4000/auth/github';
+  }}
+>
+  <FaGithub className="github-icon" />
+  <span>Connect with GitHub</span>
+</button>
     </section>
   );
 };

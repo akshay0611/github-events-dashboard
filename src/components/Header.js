@@ -36,10 +36,16 @@ const Header = ({ toggleSearchBox, isSearchBoxVisible }) => {
             </span>
           </div>
 
-          <button className="github-button">
-            <FaGithub className="github-icon" />
-            <span>Connect with GitHub</span>
-          </button>
+          <button
+  className="github-button"
+  onClick={() => {
+    window.location.href = 'http://localhost:4000/auth/github';
+  }}
+>
+  <FaGithub className="github-icon" />
+  <span>Connect with GitHub</span>
+</button>
+
         </div>
       </div>
     </header>
