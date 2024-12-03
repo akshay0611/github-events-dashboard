@@ -56,51 +56,34 @@ function App() {
       }
   
       try {
-        // Fetch users
-        const userResponse = await fetch(
-          `https://api.github.com/search/users?q=${unifiedSearchQuery}&per_page=5`
-        );
+        // Separate the query for repositories and users
+        const [repoResponse, userResponse] = await Promise.all([
+          fetch(`https://api.github.com/search/repositories?q=${unifiedSearchQuery}+in:name,description`), // Search repositories by name/description
+          fetch(`https://api.github.com/search/users?q=${unifiedSearchQuery}`) // Search users normally
+        ]);
+  
+        const repoData = await repoResponse.json();
         const userData = await userResponse.json();
   
-        let repoData = { items: [] };
-  
-        // Dynamically check if the query is likely a username by matching an exact user
-        const exactUserMatch = userData.items?.find(
-          (user) => user.login.toLowerCase() === unifiedSearchQuery.toLowerCase()
-        );
-  
-        if (exactUserMatch) {
-          // If exact match, fetch all repos for the user
-          const repoResponse = await fetch(
-            `https://api.github.com/users/${exactUserMatch.login}/repos?per_page=5`
-          );
-          repoData.items = await repoResponse.json();
-        } else {
-          // Fallback to general repo search
-          const repoResponse = await fetch(
-            `https://api.github.com/search/repositories?q=${unifiedSearchQuery}&per_page=5`
-          );
-          repoData = await repoResponse.json();
-        }
+        console.log('Repositories:', repoData);
+        console.log('Users:', userData);
   
         setSearchResults({
-          users: userData.items || [],
-          repositories: repoData.items || []
+          repositories: repoData.items?.slice(0, 5) || [], // Limit to top 5 repositories
+          users: userData.items?.slice(0, 5) || [] // Limit to top 5 users
         });
-  
-        // Debugging logs
-        console.log('Users:', userData.items);
-        console.log('Repositories:', repoData.items);
-  
       } catch (error) {
         console.error('Error fetching search results:', error);
-        setSearchResults({ repositories: [], users: [] }); // Clear results on error
+        setSearchResults({ repositories: [], users: [] });
       }
     };
   
     const debounceTimeout = setTimeout(() => fetchResults(), 300); // Debounce the API call
     return () => clearTimeout(debounceTimeout);
   }, [unifiedSearchQuery]);
+  
+  
+  
 
   return (
     <div className="App bg-gray-900 text-white min-h-screen">
