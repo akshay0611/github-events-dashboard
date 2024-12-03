@@ -139,17 +139,33 @@ function App() {
     <h4 className="section-title">Repositories</h4>
     {searchResults.repositories.map((repo) => (
       <div key={repo.id} className="result-item">
-        <a
-          href={repo.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {repo.full_name}
-        </a>
+        <div className="repo-info">
+          {/* Display repository owner's avatar on the left */}
+          <a
+            href={repo.owner.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="owner-avatar-container"
+          >
+            <img
+              src={repo.owner.avatar_url}
+              alt={repo.owner.login}
+              className="owner-avatar"
+            />
+          </a>
+          <a
+            href={repo.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {repo.full_name}
+          </a>
+        </div>
       </div>
     ))}
   </div>
 )}
+
 
             </div>
           ) : (

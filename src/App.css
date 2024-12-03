@@ -194,6 +194,21 @@
   margin-right: 10px;
 }
 
+.repo-info {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between the avatar and the repo name */
+}
+
+.owner-avatar-container {
+  display: inline-block;
+}
+
+.owner-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
 
 
 
