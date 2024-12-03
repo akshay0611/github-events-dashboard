@@ -22,22 +22,30 @@ const TrendingRepos = () => {
             sort: 'stars',
             order: 'desc',
           },
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+          },
         });
-
-        const reposWithPRs = await Promise.all(response.data.items.map(async (repo) => {
-          // Fetch the open pull requests count for each repository
-          const prResponse = await axios.get(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/pulls`, {
-            params: {
-              state: 'open',
-            },
-          });
-
-          return {
-            ...repo,
-            pullRequestCount: prResponse.data.length, // Add the pull request count to the repo data
-          };
-        }));
-
+    
+        const reposWithPRs = await Promise.all(
+          response.data.items.map(async (repo) => {
+            const prResponse = await axios.get(
+              `https://api.github.com/repos/${repo.owner.login}/${repo.name}/pulls`,
+              {
+                params: { state: 'open' },
+                headers: {
+                  Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+                },
+              }
+            );
+    
+            return {
+              ...repo,
+              pullRequestCount: prResponse.data.length,
+            };
+          })
+        );
+    
         setRepos(reposWithPRs || []);
         setLoading(false);
       } catch (err) {
@@ -45,6 +53,7 @@ const TrendingRepos = () => {
         setLoading(false);
       }
     };
+    
 
     fetchRepos();
   }, []);
