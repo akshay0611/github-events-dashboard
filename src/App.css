@@ -43,15 +43,14 @@
   top: 0;
   left: 0;
   right: 0;
-  background-color: #1a1a1a; /* Dark background */
-  padding: 15px; /* Adequate spacing */
+  background-color: #1e293b; /* Neutral dark blue background */
+  padding: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
   z-index: 1000;
   display: flex;
-  flex-direction: column; /* Adjust layout for search results */
-  align-items: center;
-  justify-content: center;
-  border-bottom: 3px solid #444; /* Neutral border */
+  align-items: center; /* Center content vertically */
+  gap: 10px; /* Spacing between elements */
+  border-bottom: 3px solid #334155; /* Slightly lighter border */
   animation: slideDown 0.3s ease-in-out;
 }
 
@@ -67,26 +66,26 @@
 
 /* Input field in the common search box */
 .common-search-box input {
-  width: 60%; /* Balanced width */
+  flex-grow: 1; /* Take up remaining space */
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #444; /* Subtle border */
-  font-size: 14px;
-  background-color: #333; /* Dark background for input */
-  color: #fff;
+  border: 1px solid #475569; /* Subtle border */
+  font-size: 16px;
+  background-color: #334155; /* Dark blue background for input */
+  color: #e2e8f0; /* Light text */
   outline: none;
-  transition: all 0.3s ease-in-out;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 /* Focus state for the input field */
 .common-search-box input:focus {
-  border-color: #888; /* Lighter neutral border on focus */
-  background-color: #444; /* Slightly lighter background */
+  border-color: #3b82f6; /* Blue border on focus */
+  background-color: #1e293b; /* Match main box background */
 }
 
 /* Placeholder color */
 .common-search-box input::placeholder {
-  color: #bbb;
+  color: #94a3b8; /* Subtle placeholder text */
 }
 
 /* Overlay styling */
@@ -96,7 +95,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+  background: rgba(30, 41, 59, 0.7); /* Semi-transparent blue overlay */
   z-index: 999;
   animation: fadeIn 0.3s forwards;
 }
@@ -113,42 +112,47 @@
 
 /* Search icon container */
 .search-icon-container {
-  margin-right: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .search-icon {
-  color: #bbb; /* Neutral color for the icon */
+  color: #94a3b8; /* Neutral icon color */
   font-size: 20px;
 }
 
 /* Styling for search results dropdown */
 .search-results {
-  margin-top: 10px;
+  position: absolute; /* Make it relative to the search box */
+  top: 100%; /* Place it directly below the search box */
+  left: 50%; /* Center align relative to the search box */
+  transform: translateX(-50%); /* Adjust to center perfectly */
   width: 60%; /* Match the width of the input field */
-  max-height: 300px;
-  overflow-y: auto;
-  background-color: #1a1a1a; /* Match the search box background */
-  border: 1px solid #444;
+  max-height: 300px; /* Limit height for scrollable content */
+  overflow-y: auto; /* Add scrolling if content exceeds max height */
+  background-color: #1e293b; /* Match the search box background */
+  border: 1px solid #475569; /* Subtle border */
   border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Slight shadow */
+  z-index: 1000; /* Ensure it's above other elements */
+  padding: 10px; /* Add some padding inside the box */
 }
 
 /* Individual result item */
 .result-item {
-  display: flex; /* Align content horizontally */
-  align-items: center; /* Center icon and text vertically */
+  display: flex;
+  align-items: center;
   gap: 15px; /* Space between icon and text */
-  padding: 12px 15px; /* Add padding for a larger clickable area */
-  border-bottom: 1px solid #333; /* Subtle separation */
-  color: #fff;
+  padding: 12px 15px;
+  border-bottom: 1px solid #334155;
+  color: #e2e8f0; /* Light text */
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .result-item:hover {
-  background-color: #292929; /* Highlight on hover */
+  background-color: #475569; /* Slightly lighter on hover */
   transform: translateX(5px); /* Subtle slide effect */
 }
 
@@ -160,21 +164,21 @@
 /* Icon for the result item */
 .result-item .result-icon {
   font-size: 18px;
-  color: #4caf50; /* Green icon for emphasis */
-  flex-shrink: 0; /* Prevent icon from shrinking */
+  color: #3b82f6; /* Blue icon for emphasis */
+  flex-shrink: 0;
 }
 
 /* Text content in the result item */
 .result-item .result-text {
-  flex-grow: 1; /* Take remaining space */
+  flex-grow: 1;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis; /* Handle long text gracefully */
+  text-overflow: ellipsis;
 }
 
 /* Links in the result item */
 .result-item a {
-  color: #4caf50; /* Green for links */
+  color: #3b82f6; /* Blue for links */
   text-decoration: none;
 }
 
@@ -189,6 +193,7 @@
   border-radius: 50%;
   margin-right: 10px;
 }
+
 
 
 

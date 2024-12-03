@@ -54,30 +54,50 @@ function App() {
         setSearchResults({ repositories: [], users: [] });
         return;
       }
-
+  
       try {
-        const [repoResponse, userResponse] = await Promise.all([
-          fetch(`https://api.github.com/search/repositories?q=${unifiedSearchQuery}`),
-          fetch(`https://api.github.com/search/users?q=${unifiedSearchQuery}`)
-        ]);
-
-        const repoData = await repoResponse.json();
+        // Fetch users
+        const userResponse = await fetch(
+          `https://api.github.com/search/users?q=${unifiedSearchQuery}&per_page=5`
+        );
         const userData = await userResponse.json();
-
-      // Log the responses for debugging
-      console.log('Repositories:', repoData);
-      console.log('Users:', userData);
-
+  
+        let repoData = { items: [] };
+  
+        // Dynamically check if the query is likely a username by matching an exact user
+        const exactUserMatch = userData.items?.find(
+          (user) => user.login.toLowerCase() === unifiedSearchQuery.toLowerCase()
+        );
+  
+        if (exactUserMatch) {
+          // If exact match, fetch all repos for the user
+          const repoResponse = await fetch(
+            `https://api.github.com/users/${exactUserMatch.login}/repos?per_page=5`
+          );
+          repoData.items = await repoResponse.json();
+        } else {
+          // Fallback to general repo search
+          const repoResponse = await fetch(
+            `https://api.github.com/search/repositories?q=${unifiedSearchQuery}&per_page=5`
+          );
+          repoData = await repoResponse.json();
+        }
+  
         setSearchResults({
-          repositories: repoData.items?.slice(0, 3) || [], // Limit to top 3 repositories
-          users: userData.items || []
+          users: userData.items || [],
+          repositories: repoData.items || []
         });
+  
+        // Debugging logs
+        console.log('Users:', userData.items);
+        console.log('Repositories:', repoData.items);
+  
       } catch (error) {
         console.error('Error fetching search results:', error);
-        setSearchResults({ repositories: [], users: [] });
+        setSearchResults({ repositories: [], users: [] }); // Clear results on error
       }
     };
-
+  
     const debounceTimeout = setTimeout(() => fetchResults(), 300); // Debounce the API call
     return () => clearTimeout(debounceTimeout);
   }, [unifiedSearchQuery]);
@@ -93,65 +113,67 @@ function App() {
 
         {isSearchBoxVisible && (
           <div className="common-search-box" ref={searchBoxRef}>
-            <div className="search-icon-container">
-              <FaSearch className="search-icon" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search Users, Repositories..."
-              value={unifiedSearchQuery}
-              onChange={(e) => setUnifiedSearchQuery(e.target.value)}
-              className="form-input"
-              ref={commonSearchInputRef}
-            />
-            {/* Display search results */}
-            {searchResults.repositories?.length > 0 || searchResults.users?.length > 0 ? (
-              <div className="search-results">
-                {/* Users Section */}
-                {searchResults.users.length > 0 && (
-                  <div className="search-users">
-                    <h4 className="section-title">Users</h4>
-                    {searchResults.users.map((user) => (
-                      <div key={user.id} className="result-item">
-                        <img
-                          src={user.avatar_url}
-                          alt={user.login}
-                          className="avatar"
-                        />
-                        <a
-                          href={user.html_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          @{user.login}
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Repositories Section */}
-                {searchResults.repositories.length > 0 && (
-                  <div className="search-repositories">
-                    <h4 className="section-title">Repositories</h4>
-                    {searchResults.repositories.map((repo) => (
-                      <div key={repo.id} className="result-item">
-                        <a
-                          href={repo.html_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {repo.full_name}
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              unifiedSearchQuery.length > 2 && <p>No results found.</p>
-            )}
+          <div className="search-icon-container">
+            <FaSearch className="search-icon" />
           </div>
+          <input
+            type="text"
+            placeholder="Search Users, Repositories..."
+            value={unifiedSearchQuery}
+            onChange={(e) => setUnifiedSearchQuery(e.target.value)}
+            className="form-input"
+            ref={commonSearchInputRef}
+          />
+          {/* Display search results */}
+          {searchResults.repositories?.length > 0 || searchResults.users?.length > 0 ? (
+            <div className="search-results">
+           {/* Users Section */}
+{searchResults.users.length > 0 && (
+  <div className="search-users">
+    <h4 className="section-title">Users</h4>
+    {searchResults.users.map((user) => (
+      <div key={user.id} className="result-item">
+        <img
+          src={user.avatar_url}
+          alt={user.login}
+          className="avatar"
+        />
+        <a
+          href={user.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          @{user.login}
+        </a>
+      </div>
+    ))}
+  </div>
+)}
+
+{/* Repositories Section */}
+{searchResults.repositories.length > 0 && (
+  <div className="search-repositories">
+    <h4 className="section-title">Repositories</h4>
+    {searchResults.repositories.map((repo) => (
+      <div key={repo.id} className="result-item">
+        <a
+          href={repo.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {repo.full_name}
+        </a>
+      </div>
+    ))}
+  </div>
+)}
+
+            </div>
+          ) : (
+            unifiedSearchQuery.length > 2 && <p>No results found.</p>
+          )}
+        </div>
+        
         )}
 
         <TrendingRepos />
