@@ -48,6 +48,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
   z-index: 1000;
   display: flex;
+  flex-direction: column; /* Adjust layout for search results */
   align-items: center;
   justify-content: center;
   border-bottom: 3px solid #444; /* Neutral border */
@@ -118,6 +119,75 @@
 .search-icon {
   color: #bbb; /* Neutral color for the icon */
   font-size: 20px;
+}
+
+/* Styling for search results dropdown */
+.search-results {
+  margin-top: 10px;
+  width: 60%; /* Match the width of the input field */
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #1a1a1a; /* Match the search box background */
+  border: 1px solid #444;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Individual result item */
+.result-item {
+  display: flex; /* Align content horizontally */
+  align-items: center; /* Center icon and text vertically */
+  gap: 15px; /* Space between icon and text */
+  padding: 12px 15px; /* Add padding for a larger clickable area */
+  border-bottom: 1px solid #333; /* Subtle separation */
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.result-item:hover {
+  background-color: #292929; /* Highlight on hover */
+  transform: translateX(5px); /* Subtle slide effect */
+}
+
+/* Remove bottom border for the last item */
+.result-item:last-child {
+  border-bottom: none;
+}
+
+/* Icon for the result item */
+.result-item .result-icon {
+  font-size: 18px;
+  color: #4caf50; /* Green icon for emphasis */
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+/* Text content in the result item */
+.result-item .result-text {
+  flex-grow: 1; /* Take remaining space */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; /* Handle long text gracefully */
+}
+
+/* Links in the result item */
+.result-item a {
+  color: #4caf50; /* Green for links */
+  text-decoration: none;
+}
+
+.result-item a:hover {
+  text-decoration: underline;
+}
+
+/* Avatar image for users */
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 

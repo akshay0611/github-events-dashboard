@@ -9,7 +9,10 @@ import { FaSearch } from 'react-icons/fa';
 
 function App() {
   const [unifiedSearchQuery, setUnifiedSearchQuery] = useState('');
-  const [userInputSearchQuery, setUserInputSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState({
+    repositories: [],
+    users: [],
+  }); // State for search results
   const [isSearchBoxVisible, setIsSearchBoxVisible] = useState(false);
   const searchBoxRef = useRef(null);
   const commonSearchInputRef = useRef(null);
@@ -18,54 +21,75 @@ function App() {
     setIsSearchBoxVisible((prev) => {
       if (prev) {
         setUnifiedSearchQuery(''); // Clear the search query when closing the search box
+        setSearchResults({ repositories: [], users: [] }); // Clear search results
       }
       return !prev;
     });
   };
 
-  // Focus the common search box input when it becomes visible
   useEffect(() => {
     if (isSearchBoxVisible && commonSearchInputRef.current) {
       commonSearchInputRef.current.focus();
     }
   }, [isSearchBoxVisible]);
 
-  // Detect clicks outside the search box to close it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
         setIsSearchBoxVisible(false);
-        setUnifiedSearchQuery(''); // Clear the search query when clicking outside
+        setUnifiedSearchQuery('');
+        setSearchResults({ repositories: [], users: [] });
       }
     };
-
-    // Add event listener
     document.addEventListener('mousedown', handleClickOutside);
-
-    // Cleanup event listener on component unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
+  // Fetch search results based on query
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (unifiedSearchQuery.length < 3) {
+        setSearchResults({ repositories: [], users: [] });
+        return;
+      }
+
+      try {
+        const [repoResponse, userResponse] = await Promise.all([
+          fetch(`https://api.github.com/search/repositories?q=${unifiedSearchQuery}`),
+          fetch(`https://api.github.com/search/users?q=${unifiedSearchQuery}`)
+        ]);
+
+        const repoData = await repoResponse.json();
+        const userData = await userResponse.json();
+
+      // Log the responses for debugging
+      console.log('Repositories:', repoData);
+      console.log('Users:', userData);
+
+        setSearchResults({
+          repositories: repoData.items?.slice(0, 3) || [], // Limit to top 3 repositories
+          users: userData.items || []
+        });
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+        setSearchResults({ repositories: [], users: [] });
+      }
+    };
+
+    const debounceTimeout = setTimeout(() => fetchResults(), 300); // Debounce the API call
+    return () => clearTimeout(debounceTimeout);
+  }, [unifiedSearchQuery]);
+
   return (
     <div className="App bg-gray-900 text-white min-h-screen">
-      <Header 
-        searchQuery={userInputSearchQuery} 
-        setSearchQuery={setUserInputSearchQuery} 
-        toggleSearchBox={toggleSearchBox}
-      />
+      <Header toggleSearchBox={toggleSearchBox} />
 
-      {/* Full-screen overlay when search box is visible */}
       {isSearchBoxVisible && <div className="overlay" />}
 
       <main className="p-8">
-        <UserInputForm 
-          searchQuery={userInputSearchQuery} 
-          setSearchQuery={setUserInputSearchQuery} 
-          toggleSearchBox={toggleSearchBox}
-          isSearchBoxVisible={isSearchBoxVisible} 
-        />
+        <UserInputForm toggleSearchBox={toggleSearchBox} isSearchBoxVisible={isSearchBoxVisible} />
 
         {isSearchBoxVisible && (
           <div className="common-search-box" ref={searchBoxRef}>
@@ -80,6 +104,53 @@ function App() {
               className="form-input"
               ref={commonSearchInputRef}
             />
+            {/* Display search results */}
+            {searchResults.repositories?.length > 0 || searchResults.users?.length > 0 ? (
+              <div className="search-results">
+                {/* Users Section */}
+                {searchResults.users.length > 0 && (
+                  <div className="search-users">
+                    <h4 className="section-title">Users</h4>
+                    {searchResults.users.map((user) => (
+                      <div key={user.id} className="result-item">
+                        <img
+                          src={user.avatar_url}
+                          alt={user.login}
+                          className="avatar"
+                        />
+                        <a
+                          href={user.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          @{user.login}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Repositories Section */}
+                {searchResults.repositories.length > 0 && (
+                  <div className="search-repositories">
+                    <h4 className="section-title">Repositories</h4>
+                    {searchResults.repositories.map((repo) => (
+                      <div key={repo.id} className="result-item">
+                        <a
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {repo.full_name}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              unifiedSearchQuery.length > 2 && <p>No results found.</p>
+            )}
           </div>
         )}
 
