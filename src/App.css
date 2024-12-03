@@ -36,3 +36,90 @@
     transform: rotate(360deg);
   }
 }
+
+/* Common search box styling */
+.common-search-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #111;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slideDown 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid #fbbf24; /* Adds a subtle yellow border at the bottom */
+}
+
+/* Animation for sliding the search box down */
+@keyframes slideDown {
+  from {
+    top: -100px;
+  }
+  to {
+    top: 0;
+  }
+}
+
+/* Input field in the common search box */
+.common-search-box input {
+  width: 50%; /* Reduced width */
+  padding: 8px; /* Reduced padding */
+  border-radius: 5px;
+  border: 1px solid #444;
+  font-size: 14px; /* Reduced font size */
+  background-color: #333;
+  color: white;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+/* Focus state for the input field */
+.common-search-box input:focus {
+  border-color: #fbbf24; /* Yellow border when focused */
+  background-color: #444; /* Slightly lighter background on focus */
+}
+
+/* Placeholder color */
+.common-search-box input::placeholder {
+  color: #bbb;
+}
+
+/* Overlay styling */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+  z-index: 999; /* Ensure it's above other content */
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+/* Fade-in animation for the overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Search icon container */
+.search-icon-container {
+  margin-right: 10px;
+}
+
+.search-icon {
+  color: #bbb;
+  font-size: 20px;
+}
+
+

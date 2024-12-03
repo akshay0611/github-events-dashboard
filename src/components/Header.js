@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaGithub, FaSearch } from 'react-icons/fa';
-import './Header.css'; // Import the custom CSS file
+import './Header.css'; 
 
-const Header = ({ headerSearch, setHeaderSearch }) => {
+const Header = ({ searchQuery, setSearchQuery, toggleSearchBox }) => {
   return (
     <header className="header">
       <div className="header-container">
@@ -19,21 +19,20 @@ const Header = ({ headerSearch, setHeaderSearch }) => {
 
         {/* Right Section */}
         <div className="header-right">
-        <div className="search-container">
-  <input
-    type="text"
-    placeholder="Users, Repositories..."
-    value={headerSearch}
-    onChange={(e) => setHeaderSearch(e.target.value)}
-    className={`search-input ${
-      headerSearch ? 'input-active' : 'input-inactive'
-    }`}
-  />
-  <span className="header-search-icon">
-    <FaSearch />
-  </span>
-</div>
-
+          <div className="search-container" onClick={toggleSearchBox}>
+            <input
+              type="text"
+              placeholder="Users, Repositories..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`search-input ${
+                searchQuery ? 'input-active' : 'input-inactive'
+              }`}
+            />
+            <span className="header-search-icon">
+              <FaSearch />
+            </span>
+          </div>
 
           <button className="github-button">
             <FaGithub className="github-icon" />
@@ -45,4 +44,4 @@ const Header = ({ headerSearch, setHeaderSearch }) => {
   );
 };
 
-export default Header; 
+export default Header;
