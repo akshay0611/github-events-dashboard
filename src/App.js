@@ -169,7 +169,7 @@ function App() {
 
             </div>
           ) : (
-            unifiedSearchQuery.length > 2 && <p>No results found.</p>
+            unifiedSearchQuery.length > 2 && <p className="no-results-message">No results found</p>
           )}
         </div>
         

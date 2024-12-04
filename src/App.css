@@ -43,40 +43,42 @@
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #1f2937; 
-  padding: 10px 15px;
+  background-color: #121826; /* Darker background to match GitTrack's theme */
+  padding: 12px 18px;
   z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-radius: 8px; /* Rounded corners for a soft look */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-  width: 60%;
+  gap: 12px;
+  border-radius: 10px; /* Slightly rounder corners for a modern look */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Enhanced shadow */
+  width: 55%; /* Slightly narrower for compactness */
   animation: slideDown 0.3s ease-in-out;
+  border: 1px solid #2f3b4e; /* Subtle border to define the search box */
 }
 
 /* Input field in the common search box */
 .common-search-box input {
   flex-grow: 1;
-  padding: 10px 12px;
-  border-radius: 4px;
-  border: 1px solid #4b5563; /* Soft border */
-  font-size: 16px;
-  background-color: #2d3748; /* Darker input background */
-  color: #e2e8f0; /* Light text */
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid #3b4a5a; /* Muted border */
+  font-size: 15px;
+  background-color: #1c2535; /* Matches GitTrack dark background */
+  color: #d1d5db; /* Lighter text for readability */
   outline: none;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Focus state for the input field */
 .common-search-box input:focus {
-  border-color: #fbbf24; /* Subtle golden focus border */
-  background-color: #374151; /* Slightly lighter background on focus */
+  border-color: #facc15;
+  background-color: #24314a;
+  box-shadow: 0 0 5px #facc15;
 }
 
 /* Placeholder color */
 .common-search-box input::placeholder {
-  color: #94a3b8; /* Subtle placeholder text */
+  color: #6b7280; /* Subtle placeholder text */
+  font-style: italic; /* Differentiates the placeholder text */
 }
 
 /* Overlay styling */
@@ -86,7 +88,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(30, 41, 59, 0.7); /* Soft overlay background */
+  background: rgba(12, 18, 29, 0.8); /* Slightly darker overlay */
   z-index: 999;
   animation: fadeIn 0.3s forwards;
 }
@@ -108,8 +110,8 @@
 }
 
 .search-icon {
-  color: #fbbf24; 
-  font-size: 18px;
+  color: #facc15; /* GitTrack's golden color for the icon */
+  font-size: 20px; /* Slightly larger for prominence */
 }
 
 /* Styling for search results dropdown */
@@ -118,25 +120,24 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
-  max-height: 250px; /* Reduced height for a more minimal look */
-  overflow-y: auto;
+  width: 80%; /* Increase the width from 60% to 80% */
   background-color: #1f2937;
   border: 1px solid #4b5563; /* Soft border */
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
   z-index: 1000;
   padding: 8px;
+  max-height: none; /* Allow height to expand naturally */
+  overflow: hidden; /* Disable scrollbars */
 }
 
 /* Section title styling */
 .section-title {
-  font-size: 18px; /* Appropriate font size for section headings */
-  font-weight: 600; /* Slightly bold for emphasis */
-  color: #ffffff; /* Golden color to match the theme */
-  margin-bottom: 8px; /* Space below the title for separation */
-  letter-spacing: 1px; /* Slight spacing between letters for a clean look */
-  text-align: left;
+  font-size: 16px; /* Balanced font size */
+  font-weight: 700; /* Bold for emphasis */
+  color: #ffffff; /* White for maximum contrast */
+  margin-bottom: 15px; /* Space below the title */
+  letter-spacing: 1px; /* Clean spacing between letters */
 }
 
 
@@ -145,9 +146,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
-  border-bottom: 1px solid #4b5563; /* Light border between results */
-  color: #e2e8f0;
+  padding: 10px 14px;
+  border-bottom: 1px solid #2f3b4e; /* Light border between results */
+  color: #d1d5db;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -155,7 +156,8 @@
 
 /* Hover state for result items */
 .result-item:hover {
-  background-color: #374151; /* Light background on hover */
+  background-color: #24314a; /* Slightly lighter hover effect */
+  transform: translateX(2px); /* Small movement for interactivity */
 }
 
 /* Remove bottom border for the last item */
@@ -165,17 +167,18 @@
 
 /* Avatar image for users */
 .avatar {
-  width: 30px; /* Slightly reduced size for a more compact look */
-  height: 30px; /* Slightly reduced size for a more compact look */
+  width: 40px; /* Larger for better visibility */
+  height: 40px;
   border-radius: 50%;
-  margin-right: 8px; /* Slightly reduced margin */
+  margin-right: 10px; /* Proper spacing */
+  border: 1px solid #3b4a5a; /* Subtle border for avatar */
 }
 
 /* Repo info styling */
 .repo-info {
   display: flex;
   align-items: center;
-  gap: 8px; /* Reduced gap between avatar and repo name */
+  gap: 10px; /* Clean spacing */
 }
 
 /* Owner avatar container */
@@ -184,18 +187,32 @@
 }
 
 .owner-avatar {
-  width: 28px; /* Slightly smaller avatar size */
-  height: 28px; /* Slightly smaller avatar size */
+  width: 40px; /* Consistent size */
+  height: 40px;
   border-radius: 50%;
 }
 
 /* Links in the result item */
 .result-item a {
-  color: #e2e8f0; /* Golden for links */
+  color: #facc15; /* GitTrack golden color for links */
   text-decoration: none;
   font-weight: 500; /* Slightly bolder text */
+  transition: color 0.3s ease;
 }
 
+.result-item a:hover {
+  color: #e5c200; /* Brighter hover effect for links */
+}
 
-
-
+.no-results-message {
+  text-align: center;
+  color: #f87171;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
