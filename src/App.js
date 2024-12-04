@@ -1,27 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import UserInputForm from './components/UserInputForm';
 import TrendingRepos from './components/TrendingRepos';
 import RecommendedForYou from './components/RecommendedForYou';
 import Footer from './components/Footer';
+import UserProfile from './components/UserProfile'; // Import the UserProfile component
 import './App.css';
 import { FaSearch } from 'react-icons/fa';
 
 function App() {
   const [unifiedSearchQuery, setUnifiedSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState({
-    repositories: [],
-    users: [],
-  }); // State for search results
+  const [searchResults, setSearchResults] = useState({ repositories: [], users: [] });
   const [isSearchBoxVisible, setIsSearchBoxVisible] = useState(false);
   const searchBoxRef = useRef(null);
   const commonSearchInputRef = useRef(null);
+  const navigate = useNavigate(); // To programmatically navigate
 
   const toggleSearchBox = () => {
     setIsSearchBoxVisible((prev) => {
       if (prev) {
-        setUnifiedSearchQuery(''); // Clear the search query when closing the search box
-        setSearchResults({ repositories: [], users: [] }); // Clear search results
+        setUnifiedSearchQuery('');
+        setSearchResults({ repositories: [], users: [] });
       }
       return !prev;
     });
@@ -47,43 +47,35 @@ function App() {
     };
   }, []);
 
-  // Fetch search results based on query
   useEffect(() => {
     const fetchResults = async () => {
       if (unifiedSearchQuery.length < 3) {
         setSearchResults({ repositories: [], users: [] });
         return;
       }
-  
+
       try {
-        // Separate the query for repositories and users
         const [repoResponse, userResponse] = await Promise.all([
-          fetch(`https://api.github.com/search/repositories?q=${unifiedSearchQuery}+in:name,description`), // Search repositories by name/description
-          fetch(`https://api.github.com/search/users?q=${unifiedSearchQuery}`) // Search users normally
+          fetch(`https://api.github.com/search/repositories?q=${unifiedSearchQuery}+in:name,description`),
+          fetch(`https://api.github.com/search/users?q=${unifiedSearchQuery}`),
         ]);
-  
+
         const repoData = await repoResponse.json();
         const userData = await userResponse.json();
-  
-        console.log('Repositories:', repoData);
-        console.log('Users:', userData);
-  
+
         setSearchResults({
-          repositories: repoData.items?.slice(0, 5) || [], // Limit to top 5 repositories
-          users: userData.items?.slice(0, 5) || [] // Limit to top 5 users
+          repositories: repoData.items?.slice(0, 5) || [],
+          users: userData.items?.slice(0, 5) || [],
         });
       } catch (error) {
         console.error('Error fetching search results:', error);
         setSearchResults({ repositories: [], users: [] });
       }
     };
-  
-    const debounceTimeout = setTimeout(() => fetchResults(), 300); // Debounce the API call
+
+    const debounceTimeout = setTimeout(() => fetchResults(), 300);
     return () => clearTimeout(debounceTimeout);
   }, [unifiedSearchQuery]);
-  
-  
-  
 
   return (
     <div className="App bg-gray-900 text-white min-h-screen">
@@ -96,83 +88,66 @@ function App() {
 
         {isSearchBoxVisible && (
           <div className="common-search-box" ref={searchBoxRef}>
-          <div className="search-icon-container">
-            <FaSearch className="search-icon" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search Users, Repositories..."
-            value={unifiedSearchQuery}
-            onChange={(e) => setUnifiedSearchQuery(e.target.value)}
-            className="form-input"
-            ref={commonSearchInputRef}
-          />
-          {/* Display search results */}
-          {searchResults.repositories?.length > 0 || searchResults.users?.length > 0 ? (
-            <div className="search-results">
-           {/* Users Section */}
-{searchResults.users.length > 0 && (
-  <div className="search-users">
-    <h4 className="section-title">Users</h4>
-    {searchResults.users.map((user) => (
-      <div key={user.id} className="result-item">
-        <img
-          src={user.avatar_url}
-          alt={user.login}
-          className="avatar"
-        />
-        <a
-          href={user.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          @{user.login}
-        </a>
-      </div>
-    ))}
-  </div>
-)}
-
-{/* Repositories Section */}
-{searchResults.repositories.length > 0 && (
-  <div className="search-repositories">
-    <h4 className="section-title">Repositories</h4>
-    {searchResults.repositories.map((repo) => (
-      <div key={repo.id} className="result-item">
-        <div className="repo-info">
-          {/* Display repository owner's avatar on the left */}
-          <a
-            href={repo.owner.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="owner-avatar-container"
-          >
-            <img
-              src={repo.owner.avatar_url}
-              alt={repo.owner.login}
-              className="owner-avatar"
-            />
-          </a>
-          <a
-            href={repo.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {repo.full_name}
-          </a>
-        </div>
-      </div>
-    ))}
-  </div>
-)}
-
-
+            <div className="search-icon-container">
+              <FaSearch className="search-icon" />
             </div>
-          ) : (
-            unifiedSearchQuery.length > 2 && <p className="no-results-message">No results found</p>
-          )}
-        </div>
-        
+            <input
+              type="text"
+              placeholder="Search Users, Repositories..."
+              value={unifiedSearchQuery}
+              onChange={(e) => setUnifiedSearchQuery(e.target.value)}
+              className="form-input"
+              ref={commonSearchInputRef}
+            />
+            {searchResults.repositories?.length > 0 || searchResults.users?.length > 0 ? (
+              <div className="search-results">
+                {searchResults.users.length > 0 && (
+                  <div className="search-users">
+                    <h4 className="section-title">Users</h4>
+                    {searchResults.users.map((user) => (
+                      <div key={user.id} className="result-item">
+                        <img src={user.avatar_url} alt={user.login} className="avatar" />
+                        <button
+                          onClick={() => navigate(`/user/${user.login}`)} // Navigate to UserProfile
+                          className="user-link"
+                        >
+                          @{user.login}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {searchResults.repositories.length > 0 && (
+                  <div className="search-repositories">
+                    <h4 className="section-title">Repositories</h4>
+                    {searchResults.repositories.map((repo) => (
+                      <div key={repo.id} className="result-item">
+                        <div className="repo-info">
+                          <a
+                            href={repo.owner.html_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="owner-avatar-container"
+                          >
+                            <img
+                              src={repo.owner.avatar_url}
+                              alt={repo.owner.login}
+                              className="owner-avatar"
+                            />
+                          </a>
+                          <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
+                            {repo.full_name}
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              unifiedSearchQuery.length > 2 && <p className="no-results-message">No results found</p>
+            )}
+          </div>
         )}
 
         <TrendingRepos />
@@ -184,4 +159,15 @@ function App() {
   );
 }
 
-export default App;
+function Root() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/user/:username" element={<UserProfile />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default Root;

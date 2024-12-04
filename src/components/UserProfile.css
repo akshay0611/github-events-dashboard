@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #111827; /* GitTrack theme */
+    color: #F9FAFB; /* GitTrack theme */
+  }
+  
+  .user-header {
+    background-color: #1f2937; /* Dark gray background */
+    color: #F9FAFB; /* Light text */
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .languages-section {
+    margin-top: 16px;
+  }
+  
+  .languages-bar {
+    display: flex;
+    height: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #374151; /* Slightly darker gray border */
+  }
+  
+  .language-segment {
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .language-segment:hover {
+    filter: brightness(1.2);
+  }
+  
+  .languages-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 16px;
+  }
+  
+  .language-item {
+    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .language-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  
+  .language-name {
+    font-weight: bold;
+    margin-left: 8px;
+  }
+  
+  .language-percent {
+    color: #9CA3AF; /* Subtle gray */
+  }
+  
+  
+  .tabs-container {
+    background-color: #1f2937;
+    border-radius: 8px;
+    color: #F9FAFB;
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background-color: #374151; /* Slightly lighter gray for inactive tabs */
+    color: #F9FAFB;
+    cursor: pointer;
+  }
+  
+  .tab-button.active {
+    background-color: #2563eb; /* Blue for active tabs */
+    color: #F9FAFB;
+  }
+  
+  .chart-placeholder {
+    background-color: #2d3748; /* Darker gray */
+    border: 1px dashed #4b5563; /* Subtle border */
+  }
+  
+  .repo-item {
+    margin-top: 8px;
+  }
+  
