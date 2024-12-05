@@ -247,44 +247,8 @@ const UserProfile = () => {
   <div className="tab-content">
     {tab === "contributions" && (
       <div>
-        <h2 className="text-xl font-bold mb-4">Recent Contributions</h2>
-        <ul className="space-y-4">
-          {userRepos.slice(0, 5).map((repo) => (
-            <li key={repo.id} className="repo-item bg-gray-700 p-4 rounded-lg shadow-md">
-              <div className="flex justify-between items-center">
-                <a
-                  href={repo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline font-semibold"
-                >
-                  {repo.name}
-                </a>
-                <span className="text-sm text-gray-400">
-                  Updated {new Date(repo.updated_at).toLocaleDateString()}
-                </span>
-              </div>
-              <div className="flex items-center space-x-4 mt-2">
-                <span className="flex items-center text-sm text-gray-300">
-                  <i className="fas fa-star mr-1"></i>{repo.stargazers_count} Stars
-                </span>
-                <span className="flex items-center text-sm text-gray-300">
-                  <i className="fas fa-code-branch mr-1"></i>{repo.forks_count} Forks
-                </span>
-                <span className="flex items-center text-sm text-gray-300">
-                  <i className="fas fa-bug mr-1"></i>{repo.open_issues_count} Open Issues
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    {tab === "highlights" && (
-      <div>
-        <h2 className="text-xl font-bold mb-4">Highlights</h2>
         
+
         {/* Pull Requests */}
         <div className="highlights-section mb-6">
           <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
@@ -348,11 +312,19 @@ const UserProfile = () => {
         </div>
       </div>
     )}
+
+    {tab === "highlights" && (
+      <div>
+       
+       <p className="text-gray-300 text-center">{username} doesn't have any highlights yet!</p>
+      </div>
+    )}
   </div>
 </div>
 
 
-      </div>
+
+</div>
 
       <Footer />
     </div>
