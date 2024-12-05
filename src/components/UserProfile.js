@@ -320,14 +320,12 @@ const UserProfile = () => {
                        ? formatDistanceToNow(new Date(pr.merged_at), { addSuffix: true })
                        : "Not yet approved"}
                    </td>
-                  <td className="px-4 py-2 text-sm text-gray-300">
-                   {pr.changed_files ? `${pr.changed_files} Files` : "N/A"}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-300">
-                    {pr.additions && pr.deletions
-                     ? `${pr.additions + pr.deletions} Lines`
-                     : "N/A"}
-                  </td>
+                   <td className="px-4 py-2 text-sm text-gray-300">
+                     {pr.changed_files} Files
+                   </td>
+                   <td className="px-4 py-2 text-sm text-gray-300">
+                     {pr.additions + pr.deletions} Lines
+                   </td>
 
                  </tr>
                ))}
