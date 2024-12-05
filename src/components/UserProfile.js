@@ -16,6 +16,8 @@ const UserProfile = () => {
   const [tab, setTab] = useState("contributions");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userPullRequests, setUserPullRequests] = useState([]); // New state for pull requests
+  const [userIssues, setUserIssues] = useState([]); // New state for issues
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,20 +30,26 @@ const UserProfile = () => {
           Authorization: `token ${token}`,
         };
 
-        const [userResponse, reposResponse] = await Promise.all([
+        const [userResponse, reposResponse, prResponse, issuesResponse] = await Promise.all([
           fetch(`https://api.github.com/users/${username}`, { headers }),
           fetch(`https://api.github.com/users/${username}/repos`, { headers }),
+          fetch(`https://api.github.com/search/issues?q=author:${username}+type:pr`, { headers }), // Pull requests
+          fetch(`https://api.github.com/search/issues?q=author:${username}+type:issue`, { headers }), // Issues
         ]);
 
-        if (!userResponse.ok || !reposResponse.ok) {
+        if (!userResponse.ok || !reposResponse.ok || !prResponse.ok || !issuesResponse.ok) {
           throw new Error("Failed to fetch user data");
         }
 
         const user = await userResponse.json();
         const repos = await reposResponse.json();
+        const prData = await prResponse.json();
+        const issueData = await issuesResponse.json();
 
         setUserData(user);
         setUserRepos(repos);
+        setUserPullRequests(prData.items); // Set the pull requests data
+        setUserIssues(issueData.items); // Set the issues data
 
         // Calculate language breakdown
         const languageStats = {};
@@ -219,47 +227,131 @@ const UserProfile = () => {
 </div>
 
 
-        {/* Tabs Section */}
-        <div className="tabs-container bg-gray-800 p-6 rounded shadow-md flex-grow">
-          <div className="tabs-header flex justify-between mb-6">
-            <button
-              onClick={() => setTab("contributions")}
-              className={`tab-button ${tab === "contributions" ? "active" : ""}`}
-            >
-              Contributions
-            </button>
-            <button
-              onClick={() => setTab("highlights")}
-              className={`tab-button ${tab === "highlights" ? "active" : ""}`}
-            >
-              Highlights
-            </button>
-          </div>
+{/* Tabs Section */}
+<div className="tabs-container bg-gray-800 p-6 rounded shadow-md flex-grow">
+  <div className="tabs-header flex justify-between mb-6">
+    <button
+      onClick={() => setTab("contributions")}
+      className={`tab-button ${tab === "contributions" ? "active" : ""}`}
+    >
+      Contributions
+    </button>
+    <button
+      onClick={() => setTab("highlights")}
+      className={`tab-button ${tab === "highlights" ? "active" : ""}`}
+    >
+      Highlights
+    </button>
+  </div>
 
-          <div className="tab-content">
-            {tab === "contributions" && (
-              <div>
-                <h2 className="text-xl font-bold mb-4">Recent Contributions</h2>
-                <ul>
-                  {userRepos.slice(0, 5).map((repo) => (
-                    <li key={repo.id} className="repo-item">
-                      <a
-                        href={repo.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:underline"
-                      >
-                        {repo.name}
-                      </a>{" "}
-                      - Updated {new Date(repo.updated_at).toLocaleDateString()}
-                    </li>
-                  ))}
-                </ul>
+  <div className="tab-content">
+    {tab === "contributions" && (
+      <div>
+        <h2 className="text-xl font-bold mb-4">Recent Contributions</h2>
+        <ul className="space-y-4">
+          {userRepos.slice(0, 5).map((repo) => (
+            <li key={repo.id} className="repo-item bg-gray-700 p-4 rounded-lg shadow-md">
+              <div className="flex justify-between items-center">
+                <a
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline font-semibold"
+                >
+                  {repo.name}
+                </a>
+                <span className="text-sm text-gray-400">
+                  Updated {new Date(repo.updated_at).toLocaleDateString()}
+                </span>
               </div>
-            )}
-            {tab === "highlights" && <p>No highlights available.</p>}
-          </div>
+              <div className="flex items-center space-x-4 mt-2">
+                <span className="flex items-center text-sm text-gray-300">
+                  <i className="fas fa-star mr-1"></i>{repo.stargazers_count} Stars
+                </span>
+                <span className="flex items-center text-sm text-gray-300">
+                  <i className="fas fa-code-branch mr-1"></i>{repo.forks_count} Forks
+                </span>
+                <span className="flex items-center text-sm text-gray-300">
+                  <i className="fas fa-bug mr-1"></i>{repo.open_issues_count} Open Issues
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {tab === "highlights" && (
+      <div>
+        <h2 className="text-xl font-bold mb-4">Highlights</h2>
+        
+        {/* Pull Requests */}
+        <div className="highlights-section mb-6">
+          <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
+          {userPullRequests.length > 0 ? (
+            <ul className="space-y-3">
+              {userPullRequests.slice(0, 5).map((pr) => (
+                <li key={pr.id} className="highlight-item bg-gray-700 p-4 rounded-lg shadow-md">
+                  <div className="flex justify-between items-center">
+                    <a
+                      href={pr.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline font-semibold"
+                    >
+                      {pr.title}
+                    </a>
+                    <span className="text-sm text-gray-400">
+                      {new Date(pr.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-300 mt-2">
+                    {pr.state === 'open' ? 'Open' : 'Closed'} | {pr.comments} Comments
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-300">No recent pull requests.</p>
+          )}
         </div>
+
+        {/* Issues */}
+        <div className="highlights-section">
+          <h3 className="text-lg font-semibold mb-2">Recent Issues</h3>
+          {userIssues.length > 0 ? (
+            <ul className="space-y-3">
+              {userIssues.slice(0, 5).map((issue) => (
+                <li key={issue.id} className="highlight-item bg-gray-700 p-4 rounded-lg shadow-md">
+                  <div className="flex justify-between items-center">
+                    <a
+                      href={issue.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline font-semibold"
+                    >
+                      {issue.title}
+                    </a>
+                    <span className="text-sm text-gray-400">
+                      {new Date(issue.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-300 mt-2">
+                    {issue.state === 'open' ? 'Open' : 'Closed'} | {issue.comments} Comments
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-300">No recent issues.</p>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+
       </div>
 
       <Footer />
