@@ -16,8 +16,9 @@ const UserProfile = () => {
   const [tab, setTab] = useState("contributions");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userPullRequests, setUserPullRequests] = useState([]); // New state for pull requests
-  const [userIssues, setUserIssues] = useState([]); // New state for issues
+  const [userPullRequests, setUserPullRequests] = useState([]); 
+  const [userIssues, setUserIssues] = useState([]); 
+  const [subTab, setSubTab] = useState("pullRequests");  // Default to "pullRequests"
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -247,80 +248,97 @@ const UserProfile = () => {
   <div className="tab-content">
     {tab === "contributions" && (
       <div>
-        
-
-        {/* Pull Requests */}
-        <div className="highlights-section mb-6">
-          <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
-          {userPullRequests.length > 0 ? (
-            <ul className="space-y-3">
-              {userPullRequests.slice(0, 5).map((pr) => (
-                <li key={pr.id} className="highlight-item bg-gray-700 p-4 rounded-lg shadow-md">
-                  <div className="flex justify-between items-center">
-                    <a
-                      href={pr.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:underline font-semibold"
-                    >
-                      {pr.title}
-                    </a>
-                    <span className="text-sm text-gray-400">
-                      {new Date(pr.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-300 mt-2">
-                    {pr.state === 'open' ? 'Open' : 'Closed'} | {pr.comments} Comments
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-300">No recent pull requests.</p>
-          )}
+        {/* Sub-tabs for Pull Requests and Issues */}
+        <div className="sub-tabs-header flex justify-between mb-6">
+          <button
+            onClick={() => setSubTab("pullRequests")}
+            className={`tab-button ${subTab === "pullRequests" ? "active" : ""}`}
+          >
+            Pull Requests
+          </button>
+          <button
+            onClick={() => setSubTab("issues")}
+            className={`tab-button ${subTab === "issues" ? "active" : ""}`}
+          >
+            Issues
+          </button>
         </div>
 
-        {/* Issues */}
-        <div className="highlights-section">
-          <h3 className="text-lg font-semibold mb-2">Recent Issues</h3>
-          {userIssues.length > 0 ? (
-            <ul className="space-y-3">
-              {userIssues.slice(0, 5).map((issue) => (
-                <li key={issue.id} className="highlight-item bg-gray-700 p-4 rounded-lg shadow-md">
-                  <div className="flex justify-between items-center">
-                    <a
-                      href={issue.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:underline font-semibold"
-                    >
-                      {issue.title}
-                    </a>
-                    <span className="text-sm text-gray-400">
-                      {new Date(issue.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-300 mt-2">
-                    {issue.state === 'open' ? 'Open' : 'Closed'} | {issue.comments} Comments
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-300">No recent issues.</p>
-          )}
-        </div>
+        {/* Content for the selected sub-tab */}
+        {subTab === "pullRequests" && (
+          <div className="highlights-section mb-6">
+            <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
+            {userPullRequests.length > 0 ? (
+              <ul className="space-y-3">
+                {userPullRequests.slice(0, 5).map((pr) => (
+                  <li key={pr.id} className="highlight-item bg-gray-700 p-4 rounded-lg shadow-md">
+                    <div className="flex justify-between items-center">
+                      <a
+                        href={pr.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:underline font-semibold"
+                      >
+                        {pr.title}
+                      </a>
+                      <span className="text-sm text-gray-400">
+                        {new Date(pr.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-300 mt-2">
+                      {pr.state === "open" ? "Open" : "Closed"} | {pr.comments} Comments
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-300">No recent pull requests.</p>
+            )}
+          </div>
+        )}
+
+        {subTab === "issues" && (
+          <div className="highlights-section">
+            <h3 className="text-lg font-semibold mb-2">Recent Issues</h3>
+            {userIssues.length > 0 ? (
+              <ul className="space-y-3">
+                {userIssues.slice(0, 5).map((issue) => (
+                  <li key={issue.id} className="highlight-item bg-gray-700 p-4 rounded-lg shadow-md">
+                    <div className="flex justify-between items-center">
+                      <a
+                        href={issue.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:underline font-semibold"
+                      >
+                        {issue.title}
+                      </a>
+                      <span className="text-sm text-gray-400">
+                        {new Date(issue.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-300 mt-2">
+                      {issue.state === "open" ? "Open" : "Closed"} | {issue.comments} Comments
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-300">No recent issues.</p>
+            )}
+          </div>
+        )}
       </div>
     )}
 
     {tab === "highlights" && (
       <div>
-       
-       <p className="text-gray-300 text-center">{username} doesn't have any highlights yet!</p>
+        <p className="text-gray-300 text-center">{username} doesn't have any highlights yet!</p>
       </div>
     )}
   </div>
 </div>
+
 
 
 
