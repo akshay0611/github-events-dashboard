@@ -47,9 +47,28 @@ const UserProfile = () => {
         const prData = await prResponse.json();
         const issueData = await issuesResponse.json();
 
+    // Fetch detailed PR data for each PR
+    const detailedPullRequests = await Promise.all(
+      prData.items.map(async (pr) => {
+        const prDetailsResponse = await fetch(pr.pull_request.url, { headers });
+        if (!prDetailsResponse.ok) {
+          return null; // Handle failed requests gracefully
+        }
+        const prDetails = await prDetailsResponse.json();
+        return {
+          ...pr,
+          changed_files: prDetails.changed_files,
+          additions: prDetails.additions,
+          deletions: prDetails.deletions,
+          merged_at: prDetails.merged_at, // For the "Date Approved" column
+          updated_at: prDetails.updated_at, // For the "Last Commit Date" column
+        };
+      })
+    );
+
         setUserData(user);
         setUserRepos(repos);
-        setUserPullRequests(prData.items); // Set the pull requests data
+        setUserPullRequests(detailedPullRequests.filter(Boolean)); // Filter out any null responses
         setUserIssues(issueData.items); // Set the issues data
 
         // Calculate language breakdown
@@ -265,7 +284,7 @@ const UserProfile = () => {
         </div>
 
         {/* Content for the selected sub-tab */}
-        {subTab === "pullRequests" && (
+      {subTab === "pullRequests" && (
        <div className="highlights-section mb-6">
        <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
        {userPullRequests.length > 0 ? (
@@ -301,12 +320,15 @@ const UserProfile = () => {
                        ? formatDistanceToNow(new Date(pr.merged_at), { addSuffix: true })
                        : "Not yet approved"}
                    </td>
-                   <td className="px-4 py-2 text-sm text-gray-300">
-                     {pr.changed_files} Files
-                   </td>
-                   <td className="px-4 py-2 text-sm text-gray-300">
-                     {pr.additions + pr.deletions} Lines
-                   </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                   {pr.changed_files ? `${pr.changed_files} Files` : "N/A"}
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-300">
+                    {pr.additions && pr.deletions
+                     ? `${pr.additions + pr.deletions} Lines`
+                     : "N/A"}
+                  </td>
+
                  </tr>
                ))}
              </tbody>
@@ -315,8 +337,9 @@ const UserProfile = () => {
        ) : (
          <p className="text-gray-300">No recent pull requests.</p>
        )}
-     </div>
-        )}
+      </div>
+
+      )}
 
         {subTab === "issues" && (
           <div className="highlights-section">
