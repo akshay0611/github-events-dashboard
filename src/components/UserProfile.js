@@ -267,34 +267,55 @@ const UserProfile = () => {
         {/* Content for the selected sub-tab */}
         {subTab === "pullRequests" && (
           <div className="highlights-section mb-6">
-            <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
-            {userPullRequests.length > 0 ? (
-              <ul className="space-y-3">
-                {userPullRequests.slice(0, 5).map((pr) => (
-                  <li key={pr.id} className="highlight-item bg-gray-700 p-4 rounded-lg shadow-md">
-                    <div className="flex justify-between items-center">
-                      <a
-                        href={pr.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:underline font-semibold"
-                      >
-                        {pr.title}
-                      </a>
-                      <span className="text-sm text-gray-400">
-                        {new Date(pr.created_at).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-300 mt-2">
-                      {pr.state === "open" ? "Open" : "Closed"} | {pr.comments} Comments
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-300">No recent pull requests.</p>
-            )}
-          </div>
+          <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
+          {userPullRequests.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto bg-gray-700 rounded-lg shadow-md">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Latest PRs</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Last Commit Date</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Date Approved</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Files Touched</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Lines Touched</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userPullRequests.slice(0, 5).map((pr) => (
+                    <tr key={pr.id} className="bg-gray-800 border-b border-gray-600">
+                      <td className="px-4 py-2 text-sm text-gray-300">
+                        <a
+                          href={pr.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:underline font-semibold"
+                        >
+                          {pr.title}
+                        </a>
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-300">
+                        {new Date(pr.updated_at).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-300">
+                        {pr.merged_at
+                          ? new Date(pr.merged_at).toLocaleDateString()
+                          : "Not yet approved"}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-300">
+                        {pr.changed_files} Files
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-300">
+                        {pr.additions + pr.deletions} Lines
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-gray-300">No recent pull requests.</p>
+          )}
+        </div>        
         )}
 
         {subTab === "issues" && (
