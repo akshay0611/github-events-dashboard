@@ -100,8 +100,8 @@ const UserProfile = () => {
       });
 
       // Create a complete 30-day dataset
-      const completeData = Array.from({ length: 30 }, (_, i) => {
-        const day = 30 - i; // Reverse days ago (30 to 1)
+      const completeData = Array.from({ length: 365 }, (_, i) => {
+        const day = 365 - i; // Reverse days ago (30 to 1)
          return {
            daysAgo: day,
             count: dateCounts[day] || 0, // Use 0 if no data exists for the day
@@ -396,8 +396,9 @@ const UserProfile = () => {
         >
           <option value={7}>Last 7 Days</option>
           <option value={30}>Last 30 Days</option>
-          <option value={60}>Last 60 Days</option>
           <option value={90}>Last 90 Days</option>
+          <option value={120}>Last 6 Months</option>
+          <option value={365}>Last 1 Year</option>
         </select>
       </div>
             {/* Chart */}
