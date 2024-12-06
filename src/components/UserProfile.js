@@ -89,19 +89,24 @@ const UserProfile = () => {
       setPrOpenedCount(prData.total_count); // Number of PRs opened by the user
 
        // Process PRs by time (Days Ago)
-       const dateCounts = {};
+      const dateCounts = {};
        prData.items.forEach((pr) => {
          const daysAgo = getDaysAgo(pr.created_at); // Get days ago
          dateCounts[daysAgo] = (dateCounts[daysAgo] || 0) + 1; // Increment count for the days ago
-       });
+      });
 
-       // Convert to a sorted array of { daysAgo, count }
-       const sortedData = Object.entries(dateCounts)
-       .map(([daysAgo, count]) => ({ daysAgo, count }))
-       .sort((a, b) => a.daysAgo - b.daysAgo); // Sort by daysAgo
+      // Create a complete 30-day dataset
+      const completeData = Array.from({ length: 30 }, (_, i) => {
+        const day = 30 - i; // Reverse days ago (30 to 1)
+         return {
+           daysAgo: day,
+            count: dateCounts[day] || 0, // Use 0 if no data exists for the day
+            };
+      });
 
 
-       setPrDataOverTime(sortedData); // Update state with the processed data
+      // Update state with the processed and completed data
+       setPrDataOverTime(completeData);
 
       // Now we need to identify the unique repositories where the user has contributed (by opening PRs)
       const contributedRepos = new Set();
@@ -367,7 +372,6 @@ const UserProfile = () => {
           <div className="contribution-summary mb-6">
             <p>PRs Opened: {prOpenedCount}</p>
             <p>Contributed Repos: {contributedReposCount}</p>
-
             {/* Chart */}
             <div style={{ width: "80%", margin: "0 auto" }}>
               <Line data={chartData} options={chartOptions} />
