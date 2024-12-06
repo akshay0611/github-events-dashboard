@@ -29,6 +29,10 @@ const UserProfile = () => {
   const [contributedReposCount, setContributedReposCount] = useState(0); // To store the contributed repos count
   const [prDataOverTime, setPrDataOverTime] = useState([]);
 
+  const [selectedRange, setSelectedRange] = useState(30);
+  const [filteredPrData, setFilteredPrData] = useState([]);
+
+
   // Calculate the number of days ago for each PR
   const getDaysAgo = (date) => {
     const currentDate = new Date();
@@ -160,19 +164,27 @@ const UserProfile = () => {
     fetchUserData();
   }, [username]);
 
+  useEffect(() => {
+    const filteredData = prDataOverTime.filter(
+      (data) => data.daysAgo <= selectedRange
+    );
+    setFilteredPrData(filteredData);
+  }, [selectedRange, prDataOverTime]);
+
   const chartData = {
-    labels: prDataOverTime.map(
-      (data) => `${data.daysAgo} days ago` // Label shows days ago
-    ),
+    labels: filteredPrData.map((data, index) => {
+      const daysAgo = selectedRange - index; // For 7 days, 30 days, etc.
+      return `${daysAgo} days ago`;  // Generate "X days ago" label
+    }),
     datasets: [
       {
         label: "PRs Raised",
-        data: prDataOverTime.map((data) => data.count),
+        data: filteredPrData.map((data) => data.count),
         fill: true,
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgb(75, 192, 192)",
         pointBackgroundColor: "rgb(75, 192, 192)",
-        tension: 0.3, // Smooth curves
+        tension: 0.3,
       },
     ],
   };
@@ -183,27 +195,29 @@ const UserProfile = () => {
       tooltip: {
         callbacks: {
           title: (tooltipItems) => {
+            // Calculate the correct 'days ago' value based on the index
             const index = tooltipItems[0].dataIndex;
-            return `${prDataOverTime[index].daysAgo} days ago`; // Show days ago in tooltip
+            const daysAgo = selectedRange - index; // Adjust for selected range
+            return `${daysAgo} days ago`; // Show days ago in tooltip
           },
           label: (tooltipItem) => `PRs Raised: ${tooltipItem.raw}`, // Show PR count in tooltip
         },
       },
       legend: { display: false }, // Hide legend for a cleaner look
-      title: { display: true, text: "PRs Opened Over Time" },
     },
     scales: {
       x: {
-        grid: { display: false }, // Hide X-axis gridlines
+        grid: { display: false },
         ticks: {
-          display: false, // Show labels on the X-axis (days ago)
+          display: false, // Hide X-axis ticks (labels)
         },
       },
-      y: { 
-        display: false, // Hide Y-axis completely
+      y: {
+        display: false,
       },
     },
   };
+  
 
   const getLanguageColor = (language) => {
     const colors = {
@@ -372,6 +386,20 @@ const UserProfile = () => {
           <div className="contribution-summary mb-6">
             <p>PRs Opened: {prOpenedCount}</p>
             <p>Contributed Repos: {contributedReposCount}</p>
+            {/* Dropdown for Range Selection */}
+      <div className="range-selector">
+        <label htmlFor="range">Select Range:</label>
+        <select
+          id="range"
+          value={selectedRange}
+          onChange={(e) => setSelectedRange(Number(e.target.value))}
+        >
+          <option value={7}>Last 7 Days</option>
+          <option value={30}>Last 30 Days</option>
+          <option value={60}>Last 60 Days</option>
+          <option value={90}>Last 90 Days</option>
+        </select>
+      </div>
             {/* Chart */}
             <div style={{ width: "80%", margin: "0 auto" }}>
               <Line data={chartData} options={chartOptions} />

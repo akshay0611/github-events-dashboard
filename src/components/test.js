@@ -6,6 +6,11 @@ import "./UserProfile.css";
 import { IoLocationOutline, IoBusinessOutline } from 'react-icons/io5';
 import { formatDistanceToNow } from 'date-fns';
 
+import { Line } from "react-chartjs-2"; // Import Line chart
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from "chart.js";
+
+// Register required components for Chart.js
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 
 const UserProfile = () => {
@@ -22,6 +27,19 @@ const UserProfile = () => {
 
   const [prOpenedCount, setPrOpenedCount] = useState(0); // To store the PRs opened count
   const [contributedReposCount, setContributedReposCount] = useState(0); // To store the contributed repos count
+  const [prDataOverTime, setPrDataOverTime] = useState([]);
+
+  const [selectedRange, setSelectedRange] = useState(30);
+  const [filteredPrData, setFilteredPrData] = useState([]);
+
+
+  // Calculate the number of days ago for each PR
+  const getDaysAgo = (date) => {
+    const currentDate = new Date();
+    const prDate = new Date(date);
+    const timeDifference = currentDate - prDate; // Difference in milliseconds
+    return Math.floor(timeDifference / (1000 * 3600 * 24)); // Convert milliseconds to days
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -71,8 +89,28 @@ const UserProfile = () => {
         };
       })
     );
-         // Set PRs opened count
+      // Set PRs opened count
       setPrOpenedCount(prData.total_count); // Number of PRs opened by the user
+
+       // Process PRs by time (Days Ago)
+      const dateCounts = {};
+       prData.items.forEach((pr) => {
+         const daysAgo = getDaysAgo(pr.created_at); // Get days ago
+         dateCounts[daysAgo] = (dateCounts[daysAgo] || 0) + 1; // Increment count for the days ago
+      });
+
+      // Create a complete 30-day dataset
+      const completeData = Array.from({ length: 30 }, (_, i) => {
+        const day = 30 - i; // Reverse days ago (30 to 1)
+         return {
+           daysAgo: day,
+            count: dateCounts[day] || 0, // Use 0 if no data exists for the day
+            };
+      });
+
+
+      // Update state with the processed and completed data
+       setPrDataOverTime(completeData);
 
       // Now we need to identify the unique repositories where the user has contributed (by opening PRs)
       const contributedRepos = new Set();
@@ -91,7 +129,6 @@ const UserProfile = () => {
         setUserRepos(repos);
         setUserPullRequests(detailedPullRequests.filter(Boolean)); // Filter out any null responses
         setUserIssues(issueData.items); // Set the issues data
-
 
         // Calculate language breakdown
         const languageStats = {};
@@ -126,6 +163,57 @@ const UserProfile = () => {
 
     fetchUserData();
   }, [username]);
+
+  useEffect(() => {
+    const filteredData = prDataOverTime.filter(
+      (data) => data.daysAgo <= selectedRange
+    );
+    setFilteredPrData(filteredData);
+  }, [selectedRange, prDataOverTime]);
+
+  const chartData = {
+    labels: filteredPrData.map((data) => `${data.daysAgo} days ago`),
+    datasets: [
+      {
+        label: "PRs Raised",
+        data: filteredPrData.map((data) => data.count),
+        fill: true,
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgb(75, 192, 192)",
+        pointBackgroundColor: "rgb(75, 192, 192)",
+        tension: 0.3,
+      },
+    ],
+  };
+  
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: (tooltipItems) => {
+            const index = tooltipItems[0].dataIndex;
+            return `${prDataOverTime[index].daysAgo} days ago`; // Show days ago in tooltip
+          },
+          label: (tooltipItem) => `PRs Raised: ${tooltipItem.raw}`, // Show PR count in tooltip
+        },
+      },
+      legend: { display: false }, // Hide legend for a cleaner look
+      title: { display: true, text: "PRs Opened Over Time" },
+    },
+    scales: {
+      x: {
+        grid: { display: false }, // Hide X-axis gridlines
+        ticks: {
+          display: false, // Show labels on the X-axis (days ago)
+        },
+      },
+      y: { 
+        display: false, // Hide Y-axis completely
+      },
+    },
+  };
 
   const getLanguageColor = (language) => {
     const colors = {
@@ -292,9 +380,27 @@ const UserProfile = () => {
         {/* Display PRs opened & Contributed Repos count */}
         {userData && (
           <div className="contribution-summary mb-6">
-           <p>PRs Opened: {prOpenedCount}</p>
-           <p>Contributed Repos: {contributedReposCount}</p>
-         </div>
+            <p>PRs Opened: {prOpenedCount}</p>
+            <p>Contributed Repos: {contributedReposCount}</p>
+            {/* Dropdown for Range Selection */}
+      <div className="range-selector">
+        <label htmlFor="range">Select Range:</label>
+        <select
+          id="range"
+          value={selectedRange}
+          onChange={(e) => setSelectedRange(Number(e.target.value))}
+        >
+          <option value={7}>Last 7 Days</option>
+          <option value={30}>Last 30 Days</option>
+          <option value={60}>Last 60 Days</option>
+          <option value={90}>Last 90 Days</option>
+        </select>
+      </div>
+            {/* Chart */}
+            <div style={{ width: "80%", margin: "0 auto" }}>
+              <Line data={chartData} options={chartOptions} />
+            </div>
+          </div>
         )}
 
         {/* Sub-tabs for Pull Requests and Issues */}
@@ -314,58 +420,57 @@ const UserProfile = () => {
         </div>
 
         {/* Content for the selected sub-tab */}
-      {subTab === "pullRequests" && (
-       <div className="highlights-section mb-6">
-       <h3 className="text-lg font-semibold mb-2">Recent Pull Requests</h3>
-       {userPullRequests.length > 0 ? (
-         <div className="overflow-x-auto">
-           <table className="min-w-full table-auto bg-gray-700 rounded-lg shadow-md">
-             <thead>
-               <tr>
-                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Latest PRs</th>
-                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Last Commit Date</th>
-                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Date Approved</th>
-                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Files Touched</th>
-                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-300">Lines Touched</th>
-               </tr>
-             </thead>
-             <tbody>
-               {userPullRequests.slice(0, 15).map((pr) => (
-                 <tr key={pr.id} className="bg-gray-800 border-b border-gray-600">
-                   <td className="px-4 py-2 text-sm text-gray-300">
-                     <a
-                       href={pr.html_url}
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       className="text-blue-400 hover:underline font-semibold"
-                     >
-                       {pr.title}
-                     </a>
-                   </td>
-                   <td className="px-4 py-2 text-sm text-gray-300">
-                     {formatDistanceToNow(new Date(pr.updated_at), { addSuffix: true })}
-                   </td>
-                   <td className="px-4 py-2 text-sm text-gray-300">
-                     {pr.merged_at
-                       ? formatDistanceToNow(new Date(pr.merged_at), { addSuffix: true })
-                       : "Not yet approved"}
-                   </td>
-                   <td className="px-4 py-2 text-sm text-gray-300">
-                     {pr.changed_files} Files
-                   </td>
-                   <td className="px-4 py-2 text-sm text-gray-300">
-                     {pr.additions + pr.deletions} Lines
-                   </td>
-
-                 </tr>
-               ))}
-             </tbody>
-           </table>
-         </div>
-       ) : (
-         <p className="text-gray-300">No recent pull requests.</p>
-       )}
-      </div>
+        {subTab === "pullRequests" && (
+          <div className="highlights-section mb-6">
+            <h3 className="text-lg font-semibold mb-2">Latest PRs</h3>
+            {userPullRequests.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full table-auto bg-gray-700 rounded-lg shadow-md">
+                  <thead>
+                    <tr>
+                      <th className="font-semibold">Latest PRs</th>
+                      <th className="font-semibold">Last Commit Date</th>
+                      <th className="font-semibold">Date Approved</th>
+                      <th className="font-semibold">Files Touched</th>
+                      <th className="font-semibold">Lines Touched</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userPullRequests.slice(0, 15).map((pr) => (
+                      <tr key={pr.id} className="bg-gray-800 border-b border-gray-600">
+                        <td>
+                          <a
+                            href={pr.html_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:underline font-semibold"
+                          >
+                            {pr.title}
+                          </a>
+                        </td>
+                        <td>
+                          {formatDistanceToNow(new Date(pr.updated_at), { addSuffix: true })}
+                        </td>
+                        <td>
+                          {pr.merged_at
+                            ? formatDistanceToNow(new Date(pr.merged_at), { addSuffix: true })
+                            : "Not yet approved"}
+                        </td>
+                        <td>
+                          {pr.changed_files} Files
+                        </td>
+                        <td>
+                          {pr.additions + pr.deletions} Lines
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No recent pull requests.</p>
+            )}
+          </div>
 
       )}
 

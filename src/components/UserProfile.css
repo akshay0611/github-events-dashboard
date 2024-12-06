@@ -217,6 +217,63 @@ tbody td a:hover {
 }
 
 
+/* Style for the range selector container */
+.range-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align the dropdown to the right */
+  margin: 20px 0; /* Space around the dropdown */
+  font-family: 'Arial', sans-serif; /* Choose your preferred font */
+  background-color: #1e293b; /* Dark background */
+  padding: 10px; /* Add some padding around the container */
+}
+
+/* Style for the label */
+.range-selector label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff; /* White text for visibility on dark background */
+  margin-bottom: 8px; /* Space between label and dropdown */
+}
+
+/* Style for the select dropdown */
+.range-selector select {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #444; /* Dark border to match the dark theme */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #374151; /* Dark background to match the theme */
+  color: #fff; /* White text color for contrast against dark background */
+  cursor: pointer; /* Pointer cursor when hovering */
+  transition: all 0.3s ease; /* Smooth transition on hover/focus */
+}
+
+/* Focus state for the select dropdown */
+.range-selector select:focus {
+  border-color: #ff7043; /* Soft orange border on focus */
+  outline: none; /* Remove default outline */
+  background-color: #2d3a45; /* Slightly darker background when focused */
+  color: #fff; /* White text to remain visible */
+}
+
+
+/* Style for options inside the dropdown */
+.range-selector select option {
+  padding: 8px;
+  background-color: #fff; /* White background for options */
+  color: #333; /* Dark text color for options */
+}
+
+/* Hover effect on options inside the dropdown */
+.range-selector select option:hover {
+  background-color: #f0f0f0; /* Light gray background on hover */
+}
+
+/* Style for the select element when it's open */
+.range-selector select:focus option {
+  background-color: #f5f5f5; /* Lighter background when an option is focused */
+}
+
 
 
 
