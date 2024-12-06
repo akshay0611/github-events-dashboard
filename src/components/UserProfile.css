@@ -275,6 +275,48 @@ tbody td a:hover {
 }
 
 
+/* Styling for the repositories contributed to section */
+.repositories-list {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+/* Repository badge styling */
+.repo-badge {
+  display: flex;
+  align-items: center;
+  border: 1px solid #4c6e91; /* Soft blue border */
+  border-radius: 8px;
+  padding: 8px 14px;
+  background-color: #334155; /* Slightly lighter deep blue background */
+  color: #cbd5e1; /* Light grayish text for better contrast */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effects for badges */
+.repo-badge:hover {
+  transform: translateY(-4px); /* Lift effect */
+  box-shadow: 0 4px 10px rgba(76, 110, 145, 0.4); /* Blue shadow on hover */
+}
+
+/* Repository avatar styling */
+.repo-badge img {
+  width: 34px; /* Slightly smaller avatars */
+  height: 34px;
+  border-radius: 50%; /* Circular avatar */
+  margin-right: 12px;
+  border: 2px solid #4c6e91; /* Matching soft blue border for avatars */
+}
+
+/* Repository name styling */
+.repo-badge span {
+  font-size: 14px; /* A little smaller text */
+  font-weight: 500; /* Medium weight */
+}
+
+
 
 
 

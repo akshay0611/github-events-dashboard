@@ -5,8 +5,7 @@ import Footer from "./Footer";
 import "./UserProfile.css";
 import { IoLocationOutline, IoBusinessOutline } from 'react-icons/io5';
 import { formatDistanceToNow } from 'date-fns';
-
-import { Line } from "react-chartjs-2"; // Import Line chart
+import { Line } from "react-chartjs-2"; 
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from "chart.js";
 
 // Register required components for Chart.js
@@ -23,24 +22,23 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [userPullRequests, setUserPullRequests] = useState([]); 
   const [userIssues, setUserIssues] = useState([]); 
-  const [subTab, setSubTab] = useState("pullRequests");  // Default to "pullRequests"
-
-  const [prOpenedCount, setPrOpenedCount] = useState(0); // To store the PRs opened count
-  const [contributedReposCount, setContributedReposCount] = useState(0); // To store the contributed repos count
+  const [subTab, setSubTab] = useState("pullRequests");  
+  const [prOpenedCount, setPrOpenedCount] = useState(0); 
+  const [contributedReposCount, setContributedReposCount] = useState(0); 
   const [prDataOverTime, setPrDataOverTime] = useState([]);
-
   const [selectedRange, setSelectedRange] = useState(30);
   const [filteredPrData, setFilteredPrData] = useState([]);
+  const [repositories, setRepositories] = useState([]);
 
-
-  // Calculate the number of days ago for each PR
+  // Helper function to calculate the number of days ago from the current date
   const getDaysAgo = (date) => {
     const currentDate = new Date();
     const prDate = new Date(date);
-    const timeDifference = currentDate - prDate; // Difference in milliseconds
-    return Math.floor(timeDifference / (1000 * 3600 * 24)); // Convert milliseconds to days
+    const timeDifference = currentDate - prDate; 
+    return Math.floor(timeDifference / (1000 * 3600 * 24)); 
   };
 
+  // Fetch data for user, repositories, PRs, and issues
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -55,8 +53,8 @@ const UserProfile = () => {
         const [userResponse, reposResponse, prResponse, issuesResponse] = await Promise.all([
           fetch(`https://api.github.com/users/${username}`, { headers }),
           fetch(`https://api.github.com/users/${username}/repos`, { headers }),
-          fetch(`https://api.github.com/search/issues?q=author:${username}+type:pr+is:open`, { headers }), // PRs opened by the user
-          fetch(`https://api.github.com/search/issues?q=author:${username}+type:issue`, { headers }), // Issues
+          fetch(`https://api.github.com/search/issues?q=author:${username}+type:pr+is:open`, { headers }), 
+          fetch(`https://api.github.com/search/issues?q=author:${username}+type:issue`, { headers }), 
         ]);
 
         if (!userResponse.ok || !reposResponse.ok || !prResponse.ok || !issuesResponse.ok) {
@@ -68,11 +66,50 @@ const UserProfile = () => {
         const prData = await prResponse.json();
         const issueData = await issuesResponse.json();
 
-        console.log("PR Data:", prData.items); // Log the PR data here to inspect its structure
+        // Fetch detailed PR data for each PR
+        const detailedPullRequests = await fetchDetailedPullRequests(prData.items, headers);
 
-    // Fetch detailed PR data for each PR
-    const detailedPullRequests = await Promise.all(
-      prData.items.map(async (pr) => {
+        // Set PR opened count and other PR-related data
+
+        setPrOpenedCount(prData.total_count);
+        setPrDataOverTime(processPrDataOverTime(prData.items)); // Process PR data over time
+        
+        // Extract and set contributed repositories
+        const contributedRepos = extractContributedRepos(prData.items);
+        setRepositories(contributedRepos);
+        setContributedReposCount(contributedRepos.length);
+
+        // Set user data and repositories
+        setUserData(user);
+        setUserRepos(repos);
+        setUserPullRequests(detailedPullRequests); 
+        setUserIssues(issueData.items); // Set the issues data
+
+        // Calculate and set language stats
+        const languageStats = await fetchLanguageStats(repos, headers);
+        setLanguageData(languageStats);
+
+      } catch (err) {
+        setError(err.message || "Error loading user profile");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+    }, [username]);
+     // Filter PR data based on the selected range
+     useEffect(() => {
+      const filteredData = prDataOverTime.filter(
+      (data) => data.daysAgo <= selectedRange
+       );
+       setFilteredPrData(filteredData);
+  }, [selectedRange, prDataOverTime]); 
+
+  // Function to fetch detailed PR data for each PR
+  const fetchDetailedPullRequests = async (prItems, headers) => {
+    const prDetails = await Promise.all(
+      prItems.map(async (pr) => {
         const prDetailsResponse = await fetch(pr.pull_request.url, { headers });
         if (!prDetailsResponse.ok) {
           return null; // Handle failed requests gracefully
@@ -89,87 +126,65 @@ const UserProfile = () => {
         };
       })
     );
-      // Set PRs opened count
-      setPrOpenedCount(prData.total_count); // Number of PRs opened by the user
+    return prDetails.filter(Boolean); // Remove null values
+  };
 
-       // Process PRs by time (Days Ago)
-      const dateCounts = {};
-       prData.items.forEach((pr) => {
-         const daysAgo = getDaysAgo(pr.created_at); // Get days ago
-         dateCounts[daysAgo] = (dateCounts[daysAgo] || 0) + 1; // Increment count for the days ago
+  // Function to process PR data over time (days ago)
+   const processPrDataOverTime = (prItems) => {
+    const dateCounts = {};
+    prItems.forEach((pr) => {
+      const daysAgo = getDaysAgo(pr.created_at); // Get days ago
+      dateCounts[daysAgo] = (dateCounts[daysAgo] || 0) + 1; // Increment count for the days ago
+    });
+
+    // Create a complete dataset for the past 365 days
+    return Array.from({ length: 365 }, (_, i) => {
+      const day = 365 - i; // Reverse days ago (365 to 1)
+      return {
+        daysAgo: day,
+        count: dateCounts[day] || 0, // Use 0 if no data exists for the day
+      };
+    });
+  };
+
+  // Function to extract unique repositories from PR data
+  const extractContributedRepos = (prItems) => {
+    const contributedRepos = new Set();
+    prItems.forEach((pr) => {
+      if (pr.repository_url) contributedRepos.add(pr.repository_url);
+    });
+    return Array.from(contributedRepos).map((repoUrl) => ({
+      name: repoUrl.split("/").slice(-2).join("/"),
+      avatarUrl: `https://github.com/${repoUrl.split("/")[4]}.png`,
+    }));
+  };
+
+  // Function to fetch language stats from repositories
+  const fetchLanguageStats = async (repos, headers) => {
+    const languageStats = {};
+    for (const repo of repos) {
+      const languagesResponse = await fetch(repo.languages_url, { headers });
+      const languages = await languagesResponse.json();
+      Object.keys(languages).forEach((language) => {
+        languageStats[language] = (languageStats[language] || 0) + languages[language];
       });
+    }
 
-      // Create a complete 30-day dataset
-      const completeData = Array.from({ length: 365 }, (_, i) => {
-        const day = 365 - i; // Reverse days ago (30 to 1)
-         return {
-           daysAgo: day,
-            count: dateCounts[day] || 0, // Use 0 if no data exists for the day
-            };
-      });
+    // Calculate percentages
+    const totalBytes = Object.values(languageStats).reduce((acc, bytes) => acc + bytes, 0);
+    const languagePercentages = {};
+    Object.entries(languageStats).forEach(([lang, bytes]) => {
+      languagePercentages[lang] = ((bytes / totalBytes) * 100).toFixed(2);
+    });
 
+    // Sort by percentage and limit to top 5 languages
+    const sortedLanguages = Object.entries(languagePercentages)
+      .sort((a, b) => b[1] - a[1]) // Sort by percentage in descending order
+      .slice(0, 5); // Limit to top 5 languages
 
-      // Update state with the processed and completed data
-       setPrDataOverTime(completeData);
+    return Object.fromEntries(sortedLanguages);
+  };
 
-      // Now we need to identify the unique repositories where the user has contributed (by opening PRs)
-      const contributedRepos = new Set();
-
-      // Iterate over the PR data and add repositories to the set
-      prData.items.forEach((pr) => {
-        if (pr.repository_url) {
-          contributedRepos.add(pr.repository_url); // Adding repository URL to the set
-        }
-      });
-
-     
-      setContributedReposCount(contributedRepos.size); // Count of unique repos the user has contributed to
-
-        setUserData(user);
-        setUserRepos(repos);
-        setUserPullRequests(detailedPullRequests.filter(Boolean)); // Filter out any null responses
-        setUserIssues(issueData.items); // Set the issues data
-
-        // Calculate language breakdown
-        const languageStats = {};
-        for (const repo of repos) {
-          const languagesResponse = await fetch(repo.languages_url, { headers });
-          const languages = await languagesResponse.json();
-          Object.keys(languages).forEach((language) => {
-            languageStats[language] = (languageStats[language] || 0) + languages[language];
-          });
-        }
-
-        // Calculate percentages
-        const totalBytes = Object.values(languageStats).reduce((acc, bytes) => acc + bytes, 0);
-        const languagePercentages = {};
-        Object.entries(languageStats).forEach(([lang, bytes]) => {
-          languagePercentages[lang] = ((bytes / totalBytes) * 100).toFixed(2);
-        });
-
-        // Sort by percentage and limit to top 5 languages
-        const sortedLanguages = Object.entries(languagePercentages)
-          .sort((a, b) => b[1] - a[1]) // Sort by percentage in descending order
-          .slice(0, 5); // Limit to top 5 languages
-
-        const topLanguages = Object.fromEntries(sortedLanguages);
-        setLanguageData(topLanguages);
-      } catch (err) {
-        setError(err.message || "Error loading user profile");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, [username]);
-
-  useEffect(() => {
-    const filteredData = prDataOverTime.filter(
-      (data) => data.daysAgo <= selectedRange
-    );
-    setFilteredPrData(filteredData);
-  }, [selectedRange, prDataOverTime]);
 
   const chartData = {
     labels: filteredPrData.map((data, index) => {
@@ -405,6 +420,31 @@ const UserProfile = () => {
             <div style={{ width: "80%", margin: "0 auto" }}>
               <Line data={chartData} options={chartOptions} />
             </div>
+
+{/* Repositories Contributed To */}
+<h3>Repositories Contributed To</h3>
+<div className="repositories-list">
+  {repositories.map((repo, index) => (
+    <div
+      key={index}
+      className="repo-badge"
+    >
+      <img
+        src={repo.avatarUrl}
+        alt={repo.name}
+      />
+      <span>{repo.name.split('/')[1]}</span> {/* Extracts repo name without the owner */}
+    </div>
+  ))}
+</div>
+
+
+
+
+
+
+
+
           </div>
         )}
 
