@@ -92,25 +92,26 @@ body {
     margin-top: 8px;
   }
   
- /* Tabs Container */
+
+/* Tabs Container */
 .tabs-container {
-  background-color: #222831; /* Dark charcoal background */
+  background-color: #1e293b; /* Dark navy blue for depth */
   padding: 24px;
-  border-radius: 10px;
-  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  border-radius: 12px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Subtle shadow */
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 /* Tab Header Buttons */
 .tabs-header button,
 .sub-tabs-header button {
   background-color: transparent;
-  color: #c9d1d9; /* Soft gray text */
+  color: #f5f5f5; /* Light white-gray text */
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 10px 18px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -119,126 +120,113 @@ body {
 
 .tabs-header button:hover,
 .sub-tabs-header button:hover {
-  color: #ffffff; /* Brighten on hover */
-  background-color: #2a2e35; /* Darker hover background */
+  color: #ffffff; /* Pure white text on hover */
+  background-color: #4b5b69; /* Slightly lighter blue-gray */
+
 }
 
 .tab-button.active {
-  color: #ffffff; /* Active tab text color */
-  background-color: #026873; /* Dark teal */
-  box-shadow: 0px 4px 6px rgba(2, 104, 115, 0.4); /* Teal shadow */
+  color: #ffffff; /* Active tab text */
+  background-color: #2563eb; /* Bright blue for active state */
+  box-shadow: 0px 4px 8px rgba(37, 99, 235, 0.5); /* Blue glow */
+}
+
+h3.text-lg {
+  font-size: 20px; /* Slightly larger font size for headings */
+  font-weight: 600; /* Semi-bold for a distinct heading */
+  margin-bottom: 12px; /* Space below the heading */
+  color: #ffffff !important; /* White text for contrast */
+  text-transform: uppercase; /* Uppercase for a more striking appearance */
+  letter-spacing: 0.05em; /* Slight letter spacing for clean text */
+  padding: 8px 0; /* Padding to give the heading some breathing room */
+  border-bottom: 2px solid #475569; /* Light blue-gray underline for emphasis */
 }
 
 /* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #2a2e35; /* Slightly lighter charcoal */
+  background-color: #1e293b; /* Dark navy blue for depth */
   border-radius: 10px;
   overflow: hidden;
 }
 
 thead th {
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  background-color: #1e3a47; /* Dark teal-blue */
-  color: #90CAF9; /* Muted cyan */
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: 0.07em;
+  background-color: #334155; /* Dark blue-gray for headers */
+  color: #ffffff; /* White text for contrast */
   padding: 12px 16px;
-  border-bottom: 2px solid #008fb3; /* Muted teal */
+  border-bottom: 2px solid #475569; /* Slightly lighter blue border */
+  white-space: nowrap; /* Prevent text from breaking into multiple lines */
+  text-align: start;
 }
 
 tbody td {
   font-size: 16px;
   padding: 12px 16px;
-  color: #e8f0f2; /* Lighter text for readability */
+  color: #e5e5e5; /* Light gray for readability */
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #1A242F; /* Subtle alternate row background */
+  background-color: #273444; /* Slightly lighter navy for alternation */
 }
 
 tbody tr:nth-child(even) {
-  background-color: #212B36; /* Slightly lighter alternate row */
+  background-color: #334155; /* Subtle dark gray for alternation */
 }
 
 tbody tr:hover {
-  background-color: #26333F; /* Row hover effect */
+  background-color: #475569; /* Hover effect for rows */
+  transition: background-color 0.3s ease-in-out;
 }
 
 tbody td a {
-  color: #42A5F5; /* Vibrant blue for links */
+  color: #f5f5f5; /* Light gray-white for links */
   font-weight: 600;
   transition: color 0.3s ease-in-out;
+}
+
+.text-blue-400 {
+  color: #ffffff; /* Replace blue with white for consistency */
 }
 
 tbody td a:hover {
-  color: #64B5F6; /* Lighter blue on hover */
+  color: #d1d5db; /* Slightly softer hover color for better readability */
   text-decoration: underline;
 }
 
-/* Highlights Section */
-.highlights-section h3 {
-  color: #026873; /* Dark teal for section titles */
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
 
-.highlight-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background-color: #2a2e35; /* Card background */
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
 
-.highlight-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4); /* Lifted shadow */
-}
-
-.highlight-item a {
-  color: #42A5F5 !important; /* Vibrant blue link */
-  font-weight: 600;
-  transition: color 0.3s ease-in-out;
-}
-
-.highlight-item a:hover {
-  color: #64B5F6; /* Lighter blue on hover */
-  text-decoration: underline;
-}
-
-.highlight-item p {
-  color: #c9d1d9; /* Muted light gray text */
-  font-size: 14px;
-  margin: 0;
-}
-
-/* Text Centering */
-.tab-content p {
+/* Chart Area */
+.contribution-summary {
   text-align: center;
-  font-size: 14px;
-  color: #adb5bd; /* Neutral muted gray */
+  color: #ebe6e5; /* Light gray */
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .tabs-header,
-  .sub-tabs-header {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  table {
-    font-size: 12px; /* Smaller text on small screens */
-  }
-
-  .highlight-item {
-    font-size: 14px; /* Adjust card text size */
-  }
+.contribution-summary p {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
 }
+
+.chart-container {
+  margin: 20px auto;
+  width: 90%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
